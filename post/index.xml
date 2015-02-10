@@ -32,6 +32,19 @@ would be done.&lt;/p&gt;
 &lt;p&gt;I have the distinct feeling something has changed since the late 90&amp;rsquo;s when I
 was pretty much convinced that brute force attacks were just a stupid way to
 get caught.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a little &lt;code&gt;iptables&lt;/code&gt; snippet if you&amp;rsquo;re wondering how I made my &lt;code&gt;auth.log&lt;/code&gt;
+file stop growing:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;iptables -F  &lt;span style=&#34;color: #75715e&#34;&gt;# flush&lt;/span&gt;
+
+iptables -A INPUT -p tcp -s your-ip/32 --destination-port &lt;span style=&#34;color: #ae81ff&#34;&gt;22&lt;/span&gt; -j ACCEPT
+
+iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port &lt;span style=&#34;color: #ae81ff&#34;&gt;80&lt;/span&gt; -j ACCEPT
+iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port &lt;span style=&#34;color: #ae81ff&#34;&gt;443&lt;/span&gt; -j ACCEPT
+
+iptables -A INPUT -j REJECT  &lt;span style=&#34;color: #75715e&#34;&gt;# reject everything else&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 </description>
     </item>
     

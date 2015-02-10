@@ -83,6 +83,19 @@ would be done.</p>
 was pretty much convinced that brute force attacks were just a stupid way to
 get caught.</p>
 
+<p>Here&rsquo;s a little <code>iptables</code> snippet if you&rsquo;re wondering how I made my <code>auth.log</code>
+file stop growing:
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%">iptables -F  <span style="color: #75715e"># flush</span>
+
+iptables -A INPUT -p tcp -s your-ip/32 --destination-port <span style="color: #ae81ff">22</span> -j ACCEPT
+
+iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port <span style="color: #ae81ff">80</span> -j ACCEPT
+iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port <span style="color: #ae81ff">443</span> -j ACCEPT
+
+iptables -A INPUT -j REJECT  <span style="color: #75715e"># reject everything else</span>
+</pre></div>
+</p>
+
                     </section>
                 </article>
             </div>
