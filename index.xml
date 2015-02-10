@@ -17,7 +17,7 @@
       <guid>http://steinnes.github.io/post/brute-force-still-going-strong/</guid>
       <description>&lt;p&gt;While setting up this blog I was looking through my little VMs scattered around
 different cloud providers to find one which could serve as the A record for
-&lt;code&gt;steinn.org&lt;/code&gt; and redirect traffic to &lt;code&gt;steinnes.github.io&lt;/code&gt;.  I found one of my
+&lt;code&gt;steinn.org&lt;/code&gt; and redirect traffic to &lt;code&gt;steinnes.github.io&lt;/code&gt;.  I logged on to one of my
 &lt;a href=&#34;https://www.digitalocean.com&#34;&gt;digital ocean&lt;/a&gt; droplets that I haven&amp;rsquo;t used in
 a while so I was slightly surprised to see more than 100k lines in &lt;code&gt;/var/log/auth.log&lt;/code&gt;.&lt;/p&gt;
 
