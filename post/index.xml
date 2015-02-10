@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on steinn.org</title>
-    <link>http://steinn.org/post/</link>
+    <link>http://steinnes.github.io/post/</link>
     <description>Recent content in Posts on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 10 Feb 2015 11:44:14 +0000</lastBuildDate>
-    <atom:link href="http://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://steinnes.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>From Monolith to Services @ QuizUp</title>
-      <link>http://steinn.org/post/utmessan2015/</link>
+      <link>http://steinnes.github.io/post/utmessan2015/</link>
       <pubDate>Tue, 10 Feb 2015 11:44:14 +0000</pubDate>
       
-      <guid>http://steinn.org/post/utmessan2015/</guid>
+      <guid>http://steinnes.github.io/post/utmessan2015/</guid>
       <description>&lt;p&gt;Last week I had a talk at a local IT conference, &lt;a
 href=&#34;https://www.utmessan.is&#34;&gt;UT Messan&lt;/a&gt;.  The title of my talk was the
 rather inflated &amp;ldquo;From Monolith to Services at Scale: How QuizUp is making the
