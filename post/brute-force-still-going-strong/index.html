@@ -92,6 +92,8 @@ iptables -A INPUT -p tcp -s your-ip/32 --destination-port <span style="color: #a
 iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port <span style="color: #ae81ff">80</span> -j ACCEPT
 iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port <span style="color: #ae81ff">443</span> -j ACCEPT
 
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
 iptables -A INPUT -j REJECT  <span style="color: #75715e"># reject everything else</span>
 </pre></div>
 </p>

@@ -42,6 +42,8 @@ iptables -A INPUT -p tcp -s your-ip/32 --destination-port &lt;span style=&#34;co
 iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port &lt;span style=&#34;color: #ae81ff&#34;&gt;80&lt;/span&gt; -j ACCEPT
 iptables -A INPUT -p tcp -s 0.0.0.0/0 --destination-port &lt;span style=&#34;color: #ae81ff&#34;&gt;443&lt;/span&gt; -j ACCEPT
 
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
 iptables -A INPUT -j REJECT  &lt;span style=&#34;color: #75715e&#34;&gt;# reject everything else&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
