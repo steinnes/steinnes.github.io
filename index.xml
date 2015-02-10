@@ -17,15 +17,14 @@
       <guid>http://steinnes.github.io/post/utmessan2015/</guid>
       <description>
 
-&lt;p&gt;Last week I did a talk at a local IT conference, &lt;a
-href=&#34;https://www.utmessan.is&#34;&gt;UT Messan&lt;/a&gt;.  The title of my talk was the
-rather inflated &amp;ldquo;From Monolith to Services at Scale: How QuizUp is making the
-(inevitable?) transition, one endpoint at a time&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Last week I did a talk at a local IT conference, &lt;a href=&#34;https://www.utmessan.is&#34;&gt;UT Messan&lt;/a&gt;.
+The title was the rather inflated &amp;ldquo;&lt;em&gt;From Monolith to Services at Scale: How
+QuizUp is making the (inevitable?) transition, one endpoint at a time&lt;/em&gt;&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;In the talk I try to tell the story of how we at QuizUp are transitioning to
-a more service-oriented architecture, and which steps we decided to take first.&lt;/p&gt;
+&lt;p&gt;In it I try to tell the story of how we at QuizUp are transitioning to a more
+service-oriented architecture, and which steps we decided to take first.&lt;/p&gt;
 
-&lt;p&gt;The route we chose was to setup ZooKeeper as the heart of our system for
+&lt;p&gt;The route we chose was to use ZooKeeper as the heart of our system for
 service registration, discovery and configuration, and then figure out how to
 route client requests to services running inside Docker containers.  The
 building blocks we ended up using were basically ZooKeeper, NGiNX, Docker, our
