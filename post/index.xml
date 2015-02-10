@@ -6,8 +6,34 @@
     <description>Recent content in Posts on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Feb 2015 11:44:14 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Feb 2015 21:08:21 +0000</lastBuildDate>
     <atom:link href="http://steinnes.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>brute force still going strong</title>
+      <link>http://steinnes.github.io/post/brute-force-still-going-strong/</link>
+      <pubDate>Tue, 10 Feb 2015 21:08:21 +0000</pubDate>
+      
+      <guid>http://steinnes.github.io/post/brute-force-still-going-strong/</guid>
+      <description>&lt;p&gt;While setting up this blog I was looking through my little VMs scattered around
+different cloud providers to find one which could serve as the A record for
+&lt;code&gt;steinn.org&lt;/code&gt; and redirect traffic to &lt;code&gt;steinnes.github.io&lt;/code&gt;.  I found one of my
+(digital ocean)[&lt;a href=&#34;https://www.digitalocean.com&#34;&gt;https://www.digitalocean.com&lt;/a&gt;] droplets that I haven&amp;rsquo;t used in
+ a while so I was slightly surprised to see more than 100k lines in &lt;code&gt;/var/log/auth.log&lt;/code&gt;.&lt;/p&gt;
+
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://asciinema.org/a/16270.js&#34; id=&#34;asciicast-16270&#34; async&gt;&lt;/script&gt;
+
+&lt;p&gt;I remember being a teenager and attempting to get access to random systems
+I stumbled across on the internet.  I&amp;rsquo;m not going to lie, sometimes I&amp;rsquo;d get in
+but the fear of being discovered was more than enough to prevent both any overt
+attempts to connect, and to make sure if lucky enough to gain access, no damage
+would be done.&lt;/p&gt;
+
+&lt;p&gt;I have the distinct feeling something has changed since the late 90&amp;rsquo;s when I
+was pretty much convinced that brute force attacks were just a stupid way to
+get caught.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>From Monolith to Services @ QuizUp</title>
