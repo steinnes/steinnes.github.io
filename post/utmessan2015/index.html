@@ -65,7 +65,9 @@
                         
                     </header>
                     <section>
-                        <p>Last week I had a talk at a local IT conference, <a
+                        
+
+<p>Last week I did a talk at a local IT conference, <a
 href="https://www.utmessan.is">UT Messan</a>.  The title of my talk was the
 rather inflated &ldquo;From Monolith to Services at Scale: How QuizUp is making the
 (inevitable?) transition, one endpoint at a time&rdquo;.</p>
@@ -78,7 +80,9 @@ service registration, discovery and configuration, and then figure out how to
 route client requests to services running inside Docker containers.  The
 building blocks we ended up using were basically ZooKeeper, NGiNX, Docker, our
 own Docker registries (which we refer to as &ldquo;dockistries&rdquo;), as well as a few
-custom components which I outline in the talk.</p>
+custom components which are outlined in the talk:</p>
+
+<h2 id="video:72332d114d8f6408c00e9cd6db124848">video</h2>
 
 <p><div class="embed video-player">
 <iframe class="youtube-player" type="text/html" width="700" height="400" src="http://www.youtube.com/embed/GhgH_8-HCVQ" allowfullscreen frameborder="0">
@@ -86,18 +90,22 @@ custom components which I outline in the talk.</p>
 </div>
 </p>
 
-<p>Here are just slightly updated slides, I didn&rsquo;t manage to get them to the
-conference technician in time on Friday, but I put the tweaked version on
-Speakerdeck.
-<script async class="speakerdeck-embed" data-id="a36212c2dcc8418290d98ec6b9c0c8a1" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
-</p>
+<h2 id="slides:72332d114d8f6408c00e9cd6db124848">slides</h2>
+
+<p><script async class="speakerdeck-embed" data-id="a36212c2dcc8418290d98ec6b9c0c8a1" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<small>*The slides here above are slightly updated from the ones I used during my talk.</small></p>
 
 <p>I would have liked to tell a bit more of a story, as we did create a couple
-of services in the spring of 2014 which we always had issues deploying, and
-we realized that without standardized containers, a service registry and why
-not a dynamic router as well &ndash; we&rsquo;d probably just confuse ourselves into
-unexpected outages.  However my timeslot for this talk was only 30 minutes
-so I condensed this into 20-25 + questions.</p>
+of services in the spring of 2014 which we always had issues deploying. After
+some pondering we realized that without some kind of deployable packages (we
+rolled our own, and also looked at using .deb), or standardized containers,
+a service registry we would probably end up with a lot of confusion (and
+unexpected outages).  We decided on ZooKeeper, Docker and since we&rsquo;re doing
+that why not a dynamic router as well.</p>
+
+<p>Since the timeslot was only 30 minutes so I condensed this into 20-25 minutes
++ questions.</p>
 
                     </section>
                 </article>
