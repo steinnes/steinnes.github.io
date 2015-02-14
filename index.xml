@@ -6,8 +6,173 @@
     <description>Recent content on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Feb 2015 21:08:21 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 14 Feb 2015 17:12:57 +0000</lastBuildDate>
     <atom:link href="http://steinnes.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Docker Workshop</title>
+      <link>http://steinnes.github.io/post/docker-workshop/</link>
+      <pubDate>Sat, 14 Feb 2015 17:12:57 +0000</pubDate>
+      
+      <guid>http://steinnes.github.io/post/docker-workshop/</guid>
+      <description>
+
+&lt;p&gt;These are the instructions/background I wrote for a workshop on Docker
+when we started deploying the backend services for
+&lt;a href=&#34;http://www.quizup.com&#34;&gt;QuizUp&lt;/a&gt; as Dockers, in November 2014.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-is-docker:458e3be24730f7f94ff6d0ff1bbbd91d&#34;&gt;What is Docker?&lt;/h2&gt;
+
+&lt;p&gt;It is a server and client for creating lightweight machine images, known
+as containers.  Currently these images can be run on Linux, in what are
+known as LinuX Containers (LXC).  Docker uses AUFS (a union file system)
+and some clever magic to save time when creating new images.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-does-it-do-this:458e3be24730f7f94ff6d0ff1bbbd91d&#34;&gt;How does it do this?&lt;/h2&gt;
+
+&lt;p&gt;On an LXC-capable host, you can run the &amp;ldquo;docker&amp;rdquo; daemon which allows any
+docker client to create new images, and start them.  The images are created
+using recipe files called &amp;ldquo;Dockerfiles&amp;rdquo;, which look something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    FROM debian
+    ENV DEBIAN_FRONTEND noninteractive
+    RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
+    ADD authorized_keys /root/.ssh/authorized_keys
+    CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;If situated in a folder with a file called &lt;code&gt;Dockerfile&lt;/code&gt; with the contents
+from above, we can build an image based on it using the docker command line
+client:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;docker build -t steinn/ssh-docker-1 .
+    Sending build context to Docker daemon  2.56 kB
+    Sending build context to Docker daemon
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; : FROM debian
+     ---&amp;gt; 61f7f4f722fb
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; : ENV DEBIAN_FRONTEND noninteractive
+     ---&amp;gt; Running in 18c5aa0fa614
+     ---&amp;gt; f7fb51a8a0ec
+    Removing intermediate container 18c5aa0fa614
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt; : RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
+     ---&amp;gt; Running in efcaf53c9380
+    Get:1 http://http.debian.net wheezy Release.gpg &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1655&lt;/span&gt; B&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+    .... VERY LONG PRINTOUT SUPPRESSED ....
+     ---&amp;gt; 6172db1d263d
+    Removing intermediate container efcaf53c9380
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; : CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
+     ---&amp;gt; Running in 446fb44be23e
+     ---&amp;gt; 914c4e3e928b
+    Removing intermediate container 446fb44be23e
+    Successfully built 914c4e3e928b
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note the &lt;code&gt;---&amp;gt;&lt;/code&gt; commands in between &amp;ldquo;Steps&amp;rdquo;.  They are indicating when
+Docker is creating a new file system layer, so in effect an image, and stores
+it after every step.  This makes it extremely fast to re-run docker builds
+unless the build steps change.  Here is the output from the same command as
+above, run again, and with &lt;code&gt;time&lt;/code&gt; in front:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ time &lt;/span&gt;docker build -t steinn/ssh-docker-1 .
+    Sending build context to Docker daemon  2.56 kB
+    Sending build context to Docker daemon
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; : FROM debian
+     ---&amp;gt; 61f7f4f722fb
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; : ENV DEBIAN_FRONTEND noninteractive
+     ---&amp;gt; Using cache
+     ---&amp;gt; f7fb51a8a0ec
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt; : RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
+     ---&amp;gt; Using cache
+     ---&amp;gt; 6172db1d263d
+    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; : CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
+     ---&amp;gt; Using cache
+     ---&amp;gt; 914c4e3e928b
+    Successfully built 914c4e3e928b
+
+    real        0m0.236s
+    user        0m0.007s
+    sys 0m0.008s
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s analyse these messages a bit.  The first one says &amp;ldquo;Sending build
+context to Docker daemon  2.56 kB&amp;rdquo;.  What&amp;rsquo;s happening here?  Basically
+your docker client is making a tarball of the directory containing your
+Dockerfile and all subdirectories, and posting them along with some
+metadata to port 2375 of it&amp;rsquo;s Docker host.  The Docker host defaults on
+every machine to unix:///var/run/docker.sock, but can be set via the
+DOCKER_HOST environment variable to another machine, such as:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ export DOCKER_HOST&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;tcp://192.168.22.8:2375
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;A common approach on OS X machines is to use a set of scripts called
+&amp;ldquo;boot2docker&amp;rdquo; which basically give you a very simple interface for
+downloading and running a bare-bones linux image with a docker daemon
+via virtualbox.  It will even tell you which environment variables to
+export.  See:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;boot2docker up
+    Waiting &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; VM and Docker daemon to start...
+    .o
+    Started.
+    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/ca.pem
+    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/cert.pem
+    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/key.pem
+
+    To connect the Docker client to the Docker daemon, please &lt;span style=&#34;color: #f8f8f2&#34;&gt;set&lt;/span&gt;:
+        &lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_HOST&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;tcp://192.168.59.103:2376
+        &lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_CERT_PATH&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;/Users/ses/.boot2docker/certs/boot2docker-vm
+        &lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_TLS_VERIFY&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;exercise:458e3be24730f7f94ff6d0ff1bbbd91d&#34;&gt;Exercise&lt;/h1&gt;
+
+&lt;p&gt;Now that you&amp;rsquo;ve played around with docker a bit. It is time for an exercise.&lt;/p&gt;
+
+&lt;p&gt;A few weeks ago we did a little &amp;ldquo;testing kata&amp;rdquo; which was a Python Flask http
+web service for making basic calculations.  Since that is a common problem
+(ie. creating and dockerizing a little web service) I decided to base todays
+exercise on that.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Go to &lt;a href=&#34;https://github.com/plain-vanilla-games/flask-test-kata&#34;&gt;https://github.com/plain-vanilla-games/flask-test-kata&lt;/a&gt;
+Clone the repo and checkout the &amp;ldquo;solution&amp;rdquo; branch or use your own older solution&lt;/li&gt;
+&lt;li&gt;Create a build folder, within which you write a Dockerfile for this service&lt;/li&gt;
+&lt;li&gt;Write a Makefile which builds and tags the docker, and is able to push it to
+a Docker registry&lt;/li&gt;
+&lt;li&gt;Update the Makefile of your project to run the unit and integration tests
+Inside the Docker you just created.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Solution:
+&lt;a href=&#34;https://github.com/plain-vanilla-games/flask-test-kata/compare/solution...docker&#34;&gt;https://github.com/plain-vanilla-games/flask-test-kata/compare/solution...docker&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;When completing this exercise you will likely run into a couple of issues with
+the approach of having the &lt;code&gt;Dockerfile&lt;/code&gt; in a separate (&lt;code&gt;build&lt;/code&gt;) folder.  I solve
+those issues by using a Makefile &amp;ndash; which in it&amp;rsquo;s most simple form could start
+by copying the necessary files from &lt;code&gt;../&lt;/code&gt; and rm-ing them afterwards.&lt;/p&gt;
+
+&lt;p&gt;Since at Plain Vanilla we always tag containers with the githash (commit) of the
+code they contain, I decided to hit two birds with one stone, using either the
+tip of the current branch or the githash given by the &lt;code&gt;GITHASH&lt;/code&gt; make parameter and
+&lt;code&gt;git archive&lt;/code&gt; to deliver the code.&lt;/p&gt;
+
+&lt;p&gt;Additionally, as new timestamps on &lt;code&gt;ADD&lt;/code&gt;-ed files will break the Docker cache I
+am extracting the timestamp for the tip of the branch and setting the modification
+date for some of the files to that.  Additionally I add requirements.txt manually
+so that the &lt;code&gt;RUN pip install -r requirements.txt&lt;/code&gt; step can benefit from the Docker
+cache.&lt;/p&gt;
+
+&lt;p&gt;Your first, most basic version of the Makefile could be simpler &amp;ndash; and mine is not
+without flaws, but I decided to employ some of the slightly more advanced methods
+we use in order to expose some of the trickier parts of using Docker in production.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>brute force still going strong</title>
