@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>steinn.org</title>
-    <link>http://steinnes.github.io/</link>
+    <link>http://steinn.org/</link>
     <description>Recent content on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 14 Feb 2015 17:12:57 +0000</lastBuildDate>
-    <atom:link href="http://steinnes.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://steinn.org/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Docker Workshop</title>
-      <link>http://steinnes.github.io/post/docker-workshop/</link>
+      <link>http://steinn.org/post/docker-workshop/</link>
       <pubDate>Sat, 14 Feb 2015 17:12:57 +0000</pubDate>
       
-      <guid>http://steinnes.github.io/post/docker-workshop/</guid>
+      <guid>http://steinn.org/post/docker-workshop/</guid>
       <description>
 
 &lt;p&gt;These are the instructions/background I wrote for a workshop on Docker
@@ -176,10 +176,10 @@ we use in order to expose some of the trickier parts of using Docker in producti
     
     <item>
       <title>brute force still going strong</title>
-      <link>http://steinnes.github.io/post/brute-force-still-going-strong/</link>
+      <link>http://steinn.org/post/brute-force-still-going-strong/</link>
       <pubDate>Tue, 10 Feb 2015 21:08:21 +0000</pubDate>
       
-      <guid>http://steinnes.github.io/post/brute-force-still-going-strong/</guid>
+      <guid>http://steinn.org/post/brute-force-still-going-strong/</guid>
       <description>&lt;p&gt;While setting up this blog I was looking through my little VMs scattered around
 different cloud providers to find one which could serve as the A record for
 &lt;code&gt;steinn.org&lt;/code&gt; and redirect traffic to &lt;code&gt;steinnes.github.io&lt;/code&gt;.  I logged on to one of my
@@ -217,10 +217,10 @@ iptables -A INPUT -j REJECT  &lt;span style=&#34;color: #75715e&#34;&gt;# reject
     
     <item>
       <title>From Monolith to Services @ QuizUp</title>
-      <link>http://steinnes.github.io/post/utmessan2015/</link>
+      <link>http://steinn.org/post/utmessan2015/</link>
       <pubDate>Tue, 10 Feb 2015 11:44:14 +0000</pubDate>
       
-      <guid>http://steinnes.github.io/post/utmessan2015/</guid>
+      <guid>http://steinn.org/post/utmessan2015/</guid>
       <description>
 
 &lt;p&gt;Last week I did a talk at a local IT conference, &lt;a href=&#34;https://www.utmessan.is&#34;&gt;UT Messan&lt;/a&gt;.
@@ -266,10 +266,10 @@ that why not a dynamic router as well.&lt;/p&gt;
     
     <item>
       <title>about</title>
-      <link>http://steinnes.github.io/about/</link>
+      <link>http://steinn.org/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://steinnes.github.io/about/</guid>
+      <guid>http://steinn.org/about/</guid>
       <description>&lt;p&gt;I am an Icelandic software developer who rarely writes but often rants.&lt;/p&gt;
 
 &lt;p&gt;twitter: &lt;a href=&#34;https://twitter.com/steinnes&#34;&gt;@steinnes&lt;/a&gt;&lt;/p&gt;

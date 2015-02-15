@@ -2,28 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://steinnes.github.io/</loc>
+    <loc>http://steinn.org/</loc>
     <lastmod>2015-02-14T17:12:57+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://steinnes.github.io/post/docker-workshop/</loc>
+    <loc>http://steinn.org/post/docker-workshop/</loc>
     <lastmod>2015-02-14T17:12:57+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinnes.github.io/post/brute-force-still-going-strong/</loc>
+    <loc>http://steinn.org/post/brute-force-still-going-strong/</loc>
     <lastmod>2015-02-10T21:08:21+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinnes.github.io/post/utmessan2015/</loc>
+    <loc>http://steinn.org/post/utmessan2015/</loc>
     <lastmod>2015-02-10T11:44:14+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinnes.github.io/about/</loc>
+    <loc>http://steinn.org/about/</loc>
   </url>
   
 </urlset>
