@@ -6,8 +6,52 @@
     <description>Recent content on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Feb 2015 17:12:57 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 01 Mar 2015 16:28:22 +0000</lastBuildDate>
     <atom:link href="http://steinn.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Changing redis maxmemory gradually</title>
+      <link>http://steinn.org/post/redis-gradual-maxmemory/</link>
+      <pubDate>Sun, 01 Mar 2015 16:28:22 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/redis-gradual-maxmemory/</guid>
+      <description>&lt;p&gt;Today we&amp;rsquo;ve been busy migrating some AWS instances at work due to upcoming
+maintenance events in AWS.  One of the instance families we used a lot when
+building QuizUp is the m2 instance family and almost all of our m2 instances
+will require restarts in the next few days.&lt;/p&gt;
+
+&lt;p&gt;On some of these we are running large redis instances with tens of GB of data
+and restarting them is not pain-free, even if we would use the persistence
+features of redis, which work by periodically dumping the entire dataset into
+a &lt;code&gt;dump.rdb&lt;/code&gt; file.  If the keyspace is tens of GB, the process of saving, and
+reading the data is quite slow. Even with a disk subsystem capapble of 100MB/s
+sustained reads and writes, saving and reading will take around 500 seconds each.&lt;/p&gt;
+
+&lt;p&gt;In the mean time you probably do not want to serve requests.  While saving
+because you&amp;rsquo;ll write changes that won&amp;rsquo;t be reflected in the &lt;code&gt;dump.rdb&lt;/code&gt; file, so
+you lose data on restart, and while reading the data redis does not allow writes
+(at least by default) and even serving reads can be dangerous if your application
+makes assumptions based on the availability of keys.&lt;/p&gt;
+
+&lt;p&gt;In order to deal nicely with this scenario we basically slave our redis instances
+with newer instance types and then mostly seamlessly failover to them (I can
+write another blog post on that later).  Slaving however is not problem-free.&lt;/p&gt;
+
+&lt;p&gt;Until redis 2.8.18 the only way to slave is for the master to start by making a
+&lt;code&gt;dump.rdb&lt;/code&gt; file, which when complete gets streamed to the slave, which saves it
+to disk, then reads it up from disk, and all writes/changes happening on the
+master are buffered in the mean-time.  This causes a series of problems (more:
+&lt;a href=&#34;http://java.dzone.com/articles/top-redis-headaches-devops&#34;&gt;Top Redis Headaches for DevOps: Replication Buffer&lt;/a&gt;)
+which I won&amp;rsquo;t expand on here, but let&amp;rsquo;s suffice to say that the smaller the dataset
+is, the easier time you will have making a slave of it.&lt;/p&gt;
+
+&lt;p&gt;If your dataset is mostly volatile, meaning that it&amp;rsquo;s nice to have the data there
+but not crucial, lowering the maxmemory down to force redis to evict keys is a
+sound strategy to improve your life as a slavemaster.  Today I took a crappy script
+I had which does just that and packaged it a little more nicely and it&amp;rsquo;s on GitHub:
+&lt;a href=&#34;http://github.com/steinnes/redis-memslider&#34;&gt;steinnes/redis-memslider&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Docker Workshop</title>
