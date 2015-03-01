@@ -74,7 +74,7 @@ will require restarts in the next few days.</p>
 and restarting them is not pain-free, even if we would use the persistence
 features of redis, which work by periodically dumping the entire dataset into
 a <code>dump.rdb</code> file.  If the keyspace is tens of GB, the process of saving, and
-reading the data is quite slow. Even with a disk subsystem capapble of 100MB/s
+reading the data is quite slow. Even with a disk subsystem capable of 100MB/s
 sustained reads and writes, saving and reading will take around 500 seconds each.</p>
 
 <p>In the mean time you probably do not want to serve requests.  While saving
