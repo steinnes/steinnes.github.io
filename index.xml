@@ -40,8 +40,8 @@ write another blog post on that later).  Slaving however is not problem-free.&lt
 &lt;p&gt;Until redis 2.8.18 the only way to slave is for the master to start by making a
 &lt;code&gt;dump.rdb&lt;/code&gt; file, which when complete gets streamed to the slave, which saves it
 to disk, then reads it up from disk, and all writes/changes happening on the
-master are buffered in the mean-time.  This causes a series of problems (more:
-&lt;a href=&#34;http://java.dzone.com/articles/top-redis-headaches-devops&#34;&gt;Top Redis Headaches for DevOps: Replication Buffer&lt;/a&gt;)
+master are buffered in the mean-time.  This causes a series of problems (more
+&lt;a href=&#34;http://java.dzone.com/articles/top-redis-headaches-devops&#34;&gt;here&lt;/a&gt;)
 which I won&amp;rsquo;t expand on here, but let&amp;rsquo;s suffice to say that the smaller the dataset
 is, the easier time you will have making a slave of it.&lt;/p&gt;
 
