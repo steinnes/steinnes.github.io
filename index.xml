@@ -78,11 +78,11 @@ and some clever magic to save time when creating new images.&lt;/p&gt;
 docker client to create new images, and start them.  The images are created
 using recipe files called &amp;ldquo;Dockerfiles&amp;rdquo;, which look something like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    FROM debian
-    ENV DEBIAN_FRONTEND noninteractive
-    RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
-    ADD authorized_keys /root/.ssh/authorized_keys
-    CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt; debian&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;ENV&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt; DEBIAN_FRONTEND noninteractive&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;RUN&lt;/span&gt; apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
+&lt;span style=&#34;color: #66d9ef&#34;&gt;ADD&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt; authorized_keys /root/.ssh/authorized_keys&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;CMD&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt; mkdir -p /var/run/sshd &amp;amp;&amp;amp; exec /usr/sbin/sshd -D&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -90,26 +90,26 @@ using recipe files called &amp;ldquo;Dockerfiles&amp;rdquo;, which look somethin
 from above, we can build an image based on it using the docker command line
 client:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;docker build -t steinn/ssh-docker-1 .
-    Sending build context to Docker daemon  2.56 kB
-    Sending build context to Docker daemon
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; : FROM debian
-     ---&amp;gt; 61f7f4f722fb
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; : ENV DEBIAN_FRONTEND noninteractive
-     ---&amp;gt; Running in 18c5aa0fa614
-     ---&amp;gt; f7fb51a8a0ec
-    Removing intermediate container 18c5aa0fa614
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt; : RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
-     ---&amp;gt; Running in efcaf53c9380
-    Get:1 http://http.debian.net wheezy Release.gpg &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1655&lt;/span&gt; B&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
-    .... VERY LONG PRINTOUT SUPPRESSED ....
-     ---&amp;gt; 6172db1d263d
-    Removing intermediate container efcaf53c9380
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; : CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
-     ---&amp;gt; Running in 446fb44be23e
-     ---&amp;gt; 914c4e3e928b
-    Removing intermediate container 446fb44be23e
-    Successfully built 914c4e3e928b
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;docker build -t steinn/ssh-docker-1 .
+Sending build context to Docker daemon  2.56 kB
+Sending build context to Docker daemon
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; : FROM debian
+---&amp;gt; 61f7f4f722fb
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; : ENV DEBIAN_FRONTEND noninteractive
+---&amp;gt; Running in 18c5aa0fa614
+---&amp;gt; f7fb51a8a0ec
+Removing intermediate container 18c5aa0fa614
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt; : RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
+---&amp;gt; Running in efcaf53c9380
+Get:1 http://http.debian.net wheezy Release.gpg &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1655&lt;/span&gt; B&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+.... VERY LONG PRINTOUT SUPPRESSED ....
+---&amp;gt; 6172db1d263d
+Removing intermediate container efcaf53c9380
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; : CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
+---&amp;gt; Running in 446fb44be23e
+---&amp;gt; 914c4e3e928b
+Removing intermediate container 446fb44be23e
+Successfully built 914c4e3e928b
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -119,25 +119,25 @@ it after every step.  This makes it extremely fast to re-run docker builds
 unless the build steps change.  Here is the output from the same command as
 above, run again, and with &lt;code&gt;time&lt;/code&gt; in front:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ time &lt;/span&gt;docker build -t steinn/ssh-docker-1 .
-    Sending build context to Docker daemon  2.56 kB
-    Sending build context to Docker daemon
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; : FROM debian
-     ---&amp;gt; 61f7f4f722fb
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; : ENV DEBIAN_FRONTEND noninteractive
-     ---&amp;gt; Using cache
-     ---&amp;gt; f7fb51a8a0ec
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt; : RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
-     ---&amp;gt; Using cache
-     ---&amp;gt; 6172db1d263d
-    Step &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; : CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
-     ---&amp;gt; Using cache
-     ---&amp;gt; 914c4e3e928b
-    Successfully built 914c4e3e928b
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ time &lt;/span&gt;docker build -t steinn/ssh-docker-1 .
+Sending build context to Docker daemon  2.56 kB
+Sending build context to Docker daemon
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; : FROM debian
+---&amp;gt; 61f7f4f722fb
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; : ENV DEBIAN_FRONTEND noninteractive
+---&amp;gt; Using cache
+---&amp;gt; f7fb51a8a0ec
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt; : RUN apt-get update &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y openssh-server
+---&amp;gt; Using cache
+---&amp;gt; 6172db1d263d
+Step &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; : CMD mkdir -p /var/run/sshd &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;exec&lt;/span&gt; /usr/sbin/sshd -D
+---&amp;gt; Using cache
+---&amp;gt; 914c4e3e928b
+Successfully built 914c4e3e928b
 
-    real        0m0.236s
-    user        0m0.007s
-    sys 0m0.008s
+real        0m0.236s
+user        0m0.007s
+sys 0m0.008s
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -149,7 +149,7 @@ metadata to port 2375 of it&amp;rsquo;s Docker host.  The Docker host defaults o
 every machine to unix:///var/run/docker.sock, but can be set via the
 DOCKER_HOST environment variable to another machine, such as:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ export DOCKER_HOST&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;tcp://192.168.22.8:2375
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ export DOCKER_HOST&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;tcp://192.168.22.8:2375
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -159,18 +159,18 @@ downloading and running a bare-bones linux image with a docker daemon
 via virtualbox.  It will even tell you which environment variables to
 export.  See:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;boot2docker up
-    Waiting &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; VM and Docker daemon to start...
-    .o
-    Started.
-    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/ca.pem
-    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/cert.pem
-    Writing /Users/ses/.boot2docker/certs/boot2docker-vm/key.pem
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;boot2docker up
+Waiting &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; VM and Docker daemon to start...
+.o
+Started.
+Writing /Users/ses/.boot2docker/certs/boot2docker-vm/ca.pem
+Writing /Users/ses/.boot2docker/certs/boot2docker-vm/cert.pem
+Writing /Users/ses/.boot2docker/certs/boot2docker-vm/key.pem
 
-    To connect the Docker client to the Docker daemon, please &lt;span style=&#34;color: #f8f8f2&#34;&gt;set&lt;/span&gt;:
-        &lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_HOST&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;tcp://192.168.59.103:2376
-        &lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_CERT_PATH&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;/Users/ses/.boot2docker/certs/boot2docker-vm
-        &lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_TLS_VERIFY&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;1
+To connect the Docker client to the Docker daemon, please &lt;span style=&#34;color: #f8f8f2&#34;&gt;set&lt;/span&gt;:
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_HOST&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;tcp://192.168.59.103:2376
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_CERT_PATH&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;/Users/ses/.boot2docker/certs/boot2docker-vm
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;export DOCKER_TLS_VERIFY&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;1
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
