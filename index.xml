@@ -40,14 +40,14 @@ who were already using it for monitoring the first single-topic QuizUp
 games.  To make a long story short the fire-and-forget approach to massive
 amounts of statistical data made my heart stir.&lt;/p&gt;
 
-&lt;h2 id=&#34;re-inventing-the-wheel:45b89691d97c2fd1cd87eabd7efa9032&#34;&gt;Re-inventing the wheel&lt;/h2&gt;
+&lt;h2 id=&#34;a-job-for-udp:45b89691d97c2fd1cd87eabd7efa9032&#34;&gt;A job for UDP!&lt;/h2&gt;
 
 &lt;p&gt;For the last few weeks I&amp;rsquo;ve been working on ways to profile and optimize
 &lt;a href=&#34;http://redis.io&#34;&gt;redis&lt;/a&gt; for caching purposes.  The research is
-far from conclusive results, but one of the things I decided to do was to
+far from conclusive results, but one of the things we decided to do was to
 patch redis to add a &amp;ldquo;key sampling&amp;rdquo; mechanism which fires UDP packets
 containing a key when it gets touched.  To read this data and pipe it into
-an analyzer program I wrote a little C program which listens on a socket
+an analyzer program, I hacked up a little program which listens on a socket
 and writes anything it receives to stdout:&lt;/p&gt;
 
 &lt;p&gt;&lt;script src=&#34;https://gist.github.com/e017ea610a2ee2872e3a.js&#34;&gt;&lt;/script&gt;
@@ -58,15 +58,16 @@ pointless? Well because as a close friend pointed out I could have used
 &lt;code&gt;netcat&lt;/code&gt;.  I am slightly flattered that he said &amp;ldquo;Ah, I guess you want to
 do something more with this, which is why you don&amp;rsquo;t just use netcat..&amp;ldquo;.&lt;/p&gt;
 
-&lt;p&gt;No, I just keep forgetting that netcat supports UDP, and these bytes
-will do the same as my pointless udp dumper, on any machine with netcat:&lt;/p&gt;
+&lt;p&gt;But the answer was: No, I just keep forgetting that netcat supports UDP,
+and the eight bytes (excl. the port!) will do the same as my pointless udp
+dumper, on any machine with netcat installed:&lt;/p&gt;
 
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;nc -l -u 12345
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
-&lt;p&gt;It&amp;rsquo;s fun to re-invent the wheel, but I prefer to do it consciously, and
-for the fun of it.&lt;/p&gt;
+&lt;p&gt;It can be fun to re-invent the wheel, but I must admit that I prefer to do
+it consciously :-)&lt;/p&gt;
 </description>
     </item>
     
