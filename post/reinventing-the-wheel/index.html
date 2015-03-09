@@ -5,7 +5,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 
-        <title>Changing redis maxmemory gradually &middot; steinn.org</title>
+        <title>Reinventing the wheel &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
         <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
         <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
@@ -54,9 +54,9 @@
                 <article class="li-article">
                     <header class="li-article-header">
                         
-			    <time class="li-article-date">Sunday, March 1, 2015</time>
+			    <time class="li-article-date">Monday, March 9, 2015</time>
                         
-                        <h1 class="li-article-title">Changing redis maxmemory gradually</h1>
+                        <h1 class="li-article-title">Reinventing the wheel</h1>
                         <span class="li-article-taxonomies">
                             
 
@@ -65,41 +65,58 @@
                         
                     </header>
                     <section>
-                        <p>Today we&rsquo;ve been busy migrating some AWS instances at work due to upcoming
-maintenance events in AWS.  One of the instance families we used a lot when
-building QuizUp is the m2 instance family and almost all of our m2 instances
-will require restarts in the next few days.</p>
+                        
 
-<p>On some of these we are running large redis instances with tens of GB of data
-and restarting them is not pain-free, even if we would use the persistence
-features of redis, which work by periodically dumping the entire dataset into
-a <code>dump.rdb</code> file.  If the keyspace is tens of GB, the process of saving, and
-reading the data is quite slow. Even with a disk subsystem capable of 100MB/s
-sustained reads and writes, saving and reading will take around 500 seconds each.</p>
+<p>We all tend to reinvent the wheel once in a while, and often it&rsquo;s just
+a question of not having found the right tool with a quick search, or
+better: we prefer doing something differently and/or we enjoy the process
+of building something just for the heck of it.  This is a small story of
+me being slightly stupid, but also about UDP and how awesome it is :-)</p>
 
-<p>In the mean time you probably do not want to serve requests.  While saving
-because you&rsquo;ll write changes that won&rsquo;t be reflected in the <code>dump.rdb</code> file, so
-you lose data on restart, and while reading the data redis does not allow writes
-(at least by default) and even serving reads can be dangerous if your application
-makes assumptions based on the availability of keys.</p>
+<p>I&rsquo;m fond of UDP.  The user datagram protocol.  Unlike it&rsquo;s cousin TCP,
+UDP packets do not contain a sequence number and the protocol does not
+ack packets.  For practical purposes this means it gets used in scenarios
+where latency is more important than reliability: you prefer to lose some
+packets, rather than adding any overhead of acknowledging packets or waiting
+for packets if they arrive out-of-sequence or get lost on the way.  When
+streaming audio or video it&rsquo;s usually better to drop packets (and thus
+frames) than to stall a live stream or conversation while syncing up.</p>
 
-<p>In order to deal nicely with this scenario we basically slave our redis instances
-with newer instance types and then mostly seamlessly failover to them (I can
-write another blog post on that later).  Slaving however is not problem-free.</p>
+<p>A major reason for my current love of UDP is because of it&rsquo;s use in StatsD,
+a wonderful protocol developed (afaik) at <a href="https://codeascraft.com/2011/02/15/measure-anything-measure-everything/">Etsy</a>
+to measure &ldquo;anything and everything&rdquo; in their app.  I came to know StatsD
+when I started working for <a href="http://www.plainvanilla.is">Plain Vanilla</a>
+who were already using it for monitoring the first single-topic QuizUp
+games.  To make a long story short the fire-and-forget approach to massive
+amounts of statistical data made my heart stir.</p>
 
-<p>Until redis 2.8.18 the only way to slave is for the master to start by making a
-<code>dump.rdb</code> file, which when complete gets streamed to the slave, which saves it
-to disk, then reads it up from disk, and all writes/changes happening on the
-master are buffered in the mean-time.  This causes a series of problems (more
-<a href="http://java.dzone.com/articles/top-redis-headaches-devops">here</a>)
-which I won&rsquo;t expand on here, but let&rsquo;s suffice to say that the smaller the dataset
-is, the easier time you will have making a slave of it.</p>
+<h2 id="re-inventing-the-wheel:45b89691d97c2fd1cd87eabd7efa9032">Re-inventing the wheel</h2>
 
-<p>If your dataset is mostly volatile, meaning that it&rsquo;s nice to have the data there
-but not crucial, lowering the maxmemory down to force redis to evict keys is a
-sound strategy to improve your life as a slavemaster.  Today I took a crappy script
-I had which does just that and packaged it a little more nicely and it&rsquo;s on GitHub:
-<a href="http://github.com/steinnes/redis-memslider">steinnes/redis-memslider</a>.</p>
+<p>For the last few weeks I&rsquo;ve been working on ways to profile and optimize
+<a href="http://redis.io">redis</a> for caching purposes.  The research is
+far from conclusive results, but one of the things I decided to do was to
+patch redis to add a &ldquo;key sampling&rdquo; mechanism which fires UDP packets
+containing a key when it gets touched.  To read this data and pipe it into
+an analyzer program I wrote a little C program which listens on a socket
+and writes anything it receives to stdout:</p>
+
+<p><script src="https://gist.github.com/e017ea610a2ee2872e3a.js"></script>
+</p>
+
+<p>As you can see I named the gist for this &ldquo;pointless udp dumper&rdquo;. Why
+pointless? Well because as a close friend pointed out I could have used
+<code>netcat</code>.  I am slightly flattered that he said &ldquo;Ah, I guess you want to
+do something more with this, which is why you don&rsquo;t just use netcat..&ldquo;.</p>
+
+<p>No, I just keep forgetting that netcat supports UDP, and these bytes
+will do the same as my pointless udp dumper, on any machine with netcat:</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>nc -l -u 12345
+</pre></div>
+</p>
+
+<p>It&rsquo;s fun to re-invent the wheel, but I prefer to do it consciously, and
+for the fun of it.</p>
 
                     </section>
                 </article>
@@ -111,8 +128,7 @@ I had which does just that and packaged it a little more nicely and it&rsquo;s o
             <div class="six columns">
                 <div class="li-pagination-previous">
                     
-                        Later article<br />
-                        <a href="http://steinn.org/post/reinventing-the-wheel/"> Reinventing the wheel</a>
+                        &nbsp;
                     
                 </div>
             </div>
@@ -121,7 +137,7 @@ I had which does just that and packaged it a little more nicely and it&rsquo;s o
                     
                         
                             Older article<br />
-                            <a href="http://steinn.org/post/docker-workshop/"> Docker Workshop</a>
+                            <a href="http://steinn.org/post/redis-gradual-maxmemory/"> Changing redis maxmemory gradually</a>
                         
                     
                 </div>

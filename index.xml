@@ -6,8 +6,69 @@
     <description>Recent content on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Mar 2015 16:28:22 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Mar 2015 16:03:03 +0000</lastBuildDate>
     <atom:link href="http://steinn.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Reinventing the wheel</title>
+      <link>http://steinn.org/post/reinventing-the-wheel/</link>
+      <pubDate>Mon, 09 Mar 2015 16:03:03 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/reinventing-the-wheel/</guid>
+      <description>
+
+&lt;p&gt;We all tend to reinvent the wheel once in a while, and often it&amp;rsquo;s just
+a question of not having found the right tool with a quick search, or
+better: we prefer doing something differently and/or we enjoy the process
+of building something just for the heck of it.  This is a small story of
+me being slightly stupid, but also about UDP and how awesome it is :-)&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m fond of UDP.  The user datagram protocol.  Unlike it&amp;rsquo;s cousin TCP,
+UDP packets do not contain a sequence number and the protocol does not
+ack packets.  For practical purposes this means it gets used in scenarios
+where latency is more important than reliability: you prefer to lose some
+packets, rather than adding any overhead of acknowledging packets or waiting
+for packets if they arrive out-of-sequence or get lost on the way.  When
+streaming audio or video it&amp;rsquo;s usually better to drop packets (and thus
+frames) than to stall a live stream or conversation while syncing up.&lt;/p&gt;
+
+&lt;p&gt;A major reason for my current love of UDP is because of it&amp;rsquo;s use in StatsD,
+a wonderful protocol developed (afaik) at &lt;a href=&#34;https://codeascraft.com/2011/02/15/measure-anything-measure-everything/&#34;&gt;Etsy&lt;/a&gt;
+to measure &amp;ldquo;anything and everything&amp;rdquo; in their app.  I came to know StatsD
+when I started working for &lt;a href=&#34;http://www.plainvanilla.is&#34;&gt;Plain Vanilla&lt;/a&gt;
+who were already using it for monitoring the first single-topic QuizUp
+games.  To make a long story short the fire-and-forget approach to massive
+amounts of statistical data made my heart stir.&lt;/p&gt;
+
+&lt;h2 id=&#34;re-inventing-the-wheel:45b89691d97c2fd1cd87eabd7efa9032&#34;&gt;Re-inventing the wheel&lt;/h2&gt;
+
+&lt;p&gt;For the last few weeks I&amp;rsquo;ve been working on ways to profile and optimize
+&lt;a href=&#34;http://redis.io&#34;&gt;redis&lt;/a&gt; for caching purposes.  The research is
+far from conclusive results, but one of the things I decided to do was to
+patch redis to add a &amp;ldquo;key sampling&amp;rdquo; mechanism which fires UDP packets
+containing a key when it gets touched.  To read this data and pipe it into
+an analyzer program I wrote a little C program which listens on a socket
+and writes anything it receives to stdout:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/e017ea610a2ee2872e3a.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;As you can see I named the gist for this &amp;ldquo;pointless udp dumper&amp;rdquo;. Why
+pointless? Well because as a close friend pointed out I could have used
+&lt;code&gt;netcat&lt;/code&gt;.  I am slightly flattered that he said &amp;ldquo;Ah, I guess you want to
+do something more with this, which is why you don&amp;rsquo;t just use netcat..&amp;ldquo;.&lt;/p&gt;
+
+&lt;p&gt;No, I just keep forgetting that netcat supports UDP, and these bytes
+will do the same as my pointless udp dumper, on any machine with netcat:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;nc -l -u 12345
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s fun to re-invent the wheel, but I prefer to do it consciously, and
+for the fun of it.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Changing redis maxmemory gradually</title>
