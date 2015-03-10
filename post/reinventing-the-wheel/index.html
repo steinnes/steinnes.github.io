@@ -101,7 +101,7 @@ amounts of statistical data made my heart stir.</p>
 far from conclusive results, but one of the things we needed to do was find
 an unobtrusive way to monitor key touches in redis.</p>
 
-<p>What wedecided to do was to patch it to add a &ldquo;key sampling&rdquo; mechanism which
+<p>What we decided to do was to patch it to add a &ldquo;key sampling&rdquo; mechanism which
 fires UDP packets containing a key when it gets touched.  This allows us to
 reather cheaply allow an external program to receive a sampling of key touches
 with a minimal performance hit or overhead in redis itself.</p>
@@ -115,7 +115,7 @@ stdout.  Here&rsquo;s a gist of that program:</p>
 
 <p>I named the gist &ldquo;pointless udp dumper&rdquo;&hellip; so why pointless?</p>
 
-<p>Well because as a close friend pointed out I could have used <code>netcat</code>
+<p>Well because as a close friend pointed out I could have used <code>netcat</code>.
 My ego was slightly stroked by the fact that he said &ldquo;Ah, I guess you want
 to do something more complex later, which is why you don&rsquo;t just use netcat..&ldquo;.</p>
 
