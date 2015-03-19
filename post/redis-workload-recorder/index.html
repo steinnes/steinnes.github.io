@@ -5,13 +5,13 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 
-        <title>Posts &middot; steinn.org</title>
+        <title>redis workload recorder &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
         <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
         <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-144-precomposed.png" sizes="144x144" />
-        <link rel="alternate" href="http://steinn.org/post/index.xml" type="application/rss+xml" title="steinn.org" />
+        <link rel="alternate" href="" type="application/rss+xml" title="steinn.org" />
     </head>
     <body class="li-body">
 
@@ -44,57 +44,85 @@
 </header>
 
 
+
+
+
+
     <div class="container">
         <div class="row">
             <div class="twelve columns">
-                <h1>Posts</h1>
-                <ul class="li-article-list">
-                    
+                <article class="li-article">
+                    <header class="li-article-header">
                         
-                            <li>
-                                <time class="li-article-date">March, 19, 2015</time>
-                                <h4>goo <a href="http://steinn.org/post/redis-workload-recorder/">redis workload recorder</a></h4>
-                            </li>
+			    <time class="li-article-date">Thursday, March 19, 2015</time>
                         
-                    
+                        <h1 class="li-article-title">redis workload recorder</h1>
+                        <span class="li-article-taxonomies">
+                            
+
+                            
+                        </span>
                         
-                            <li>
-                                <time class="li-article-date">March, 9, 2015</time>
-                                <h4>goo <a href="http://steinn.org/post/reinventing-the-wheel/">Reinventing the wheel</a></h4>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <time class="li-article-date">March, 1, 2015</time>
-                                <h4>goo <a href="http://steinn.org/post/redis-gradual-maxmemory/">Changing redis maxmemory gradually</a></h4>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <time class="li-article-date">February, 14, 2015</time>
-                                <h4>goo <a href="http://steinn.org/post/docker-workshop/">Docker Workshop</a></h4>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <time class="li-article-date">February, 10, 2015</time>
-                                <h4>goo <a href="http://steinn.org/post/brute-force-still-going-strong/">brute force still going strong</a></h4>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <time class="li-article-date">February, 10, 2015</time>
-                                <h4>goo <a href="http://steinn.org/post/utmessan2015/">From Monolith to Services @ QuizUp</a></h4>
-                            </li>
-                        
-                    
-                </ul>
+                    </header>
+                    <section>
+                        <p>Recently I&rsquo;ve been working on some redis profiling and research, and since
+we run several distinct redis instances at Plain Vanilla (due to reliability
+and configuration reasons) the necessity to record a certain amount of commands
+for several different redis instances became rather apparent.</p>
+
+<p>Rather than relying on my usual <code>redis-cli monitor &gt; /some/file</code> inside a
+screen, then remembering to <code>ctrl+c</code> after say 3600 seconds, I decided to
+script this for the benefit of my future self (and maybe others).</p>
+
+<p><script src="https://gist.github.com/ead90afa9882e89b995f.js"></script>
+</p>
+
+<p>Usage:
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>screen
+<span style="color: #f8f8f2">$ </span>./redis-workload-record.py <span style="color: #ae81ff">3600</span> localhost &gt; 3600-sec-redis-something.log
+^A d
+</pre></div>
+</p>
+
+<p>This will start a screen where the workload recorder will run for 3600 seconds.
+As can be seen from the code, the exit message will be printed to stderr so
+your output can be safely redirected into a file, which then can be read and
+replayed by something like this:</p>
+
+<p><script src="https://gist.github.com/212f3273d17a7549ac46.js"></script>
+</p>
+
+<p>By running something like this:
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>cat 3600-sec-redis-something.log <span style="color: #f8f8f2">|</span> python redis-pipe-commands.py
+</pre></div>
+</p>
+
+                    </section>
+                </article>
             </div>
         </div>
+
+
+        <div class="twelve columns row li-pagination">
+            <div class="six columns">
+                <div class="li-pagination-previous">
+                    
+                        &nbsp;
+                    
+                </div>
+            </div>
+            <div class="six columns" style="margin-left: 0; margin-right: 0">
+                <div class="li-pagination-next">
+                    
+                        
+                            Older article<br />
+                            <a href="http://steinn.org/post/reinventing-the-wheel/"> Reinventing the wheel</a>
+                        
+                    
+                </div>
+            </div>
+        </div>
+
     </div>
 
 <footer class="li-page-footer">
