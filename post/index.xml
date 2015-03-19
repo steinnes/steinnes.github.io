@@ -46,6 +46,8 @@ replayed by something like this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;cat 3600-sec-redis-something.log &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; python redis-pipe-commands.py
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
+
+&lt;p&gt;Hope this benefits someone (other than my future self :-)&lt;/p&gt;
 </description>
     </item>
     
