@@ -481,3 +481,7 @@ code {
 	border-radius: 4px;
 	color: #ddd;
 }
+
+figure img {
+	width: 90%;
+}

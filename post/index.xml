@@ -6,8 +6,84 @@
     <description>Recent content in Posts on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Mar 2015 01:11:52 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Apr 2015 21:08:49 +0000</lastBuildDate>
     <atom:link href="http://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Monitoring at QuizUp: Datadog</title>
+      <link>http://steinn.org/post/datadog/</link>
+      <pubDate>Thu, 16 Apr 2015 21:08:49 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/datadog/</guid>
+      <description>&lt;p&gt;One of the services we use a lot for monitoring at QuizUp is Datadog.&lt;/p&gt;
+
+&lt;p&gt;We use several software-as-a-service&amp;rsquo;s, but this one is one of my absolute
+favorites.  Datadog is an aggregator for StatsD metrics, and StatSD is
+as &lt;a href=&#34;http://steinn.org/post/reinventing-the-wheel/&#34;&gt;I have mentioned before&lt;/a&gt;, one
+of my favorite technologies.  The way we use Datadog is both through their
+large set of excellent &lt;a href=&#34;https://www.datadoghq.com/integrations/&#34;&gt;
+integrations&lt;/a&gt;, which retrieve a host of standard metrics from every
+third party service in our stack, but also monitor all of our hosts for
+standard operating system metrics like load average, disk usage, memory
+usage broken down by application, cpu load, etc; and we&amp;rsquo;ve written our
+&lt;a href=&#34;https://gist.github.com/steinnes/04d016d19def45f85a18&#34;&gt;custom
+integrations&lt;/a&gt; if one did not exist before.&lt;/p&gt;
+
+&lt;p&gt;Additionally we instrument our applications with statsd calls which feed
+important higher level metrics into datadog where all of these can be
+combined in powerful dashboards and used by metric alerts to trigger
+e-mails, pings to Slack or PagerDuty, etc.  These metric alerts are our
+first line of defence, allowing us to detect and fix problems before they
+affect users, so effectively they keep our uptime good.  Whether it&amp;rsquo;s
+a sudden increase in the number of API non-2xx, increased latencies, disks
+filling up, elevated service health transitions, cluster size changes,
+no matter; it&amp;rsquo;s all fed into Datadog and we&amp;rsquo;re alerted from there.  This
+is the kind of service, which if it proved flaky, I would get very
+frustrated very quickly.  It&amp;rsquo;s never been flaky.  No pressure ;-)&lt;/p&gt;
+
+&lt;p&gt;The purpose of this post is however to point out a fantastic recent
+feature which I learned about this week, and might just change the way
+we work when examining incidents.  Until now I&amp;rsquo;ve been heavily utilizing
+the Screenshot+Dropbox+Copybuffer integration offered by Dropbox, to basically
+screengrab a portion of a graph or a dashboard, then paste the link to the
+relevant Slack channel and ping people who I believe should investigate.&lt;/p&gt;
+
+&lt;p&gt;But there&amp;rsquo;s an easier way to do this, &lt;a href=&#34;https://www.datadoghq.com/2015/03/real-time-graph-annotations/&#34;&gt;
+click the snapshot icon&lt;/a&gt; and tag the corresponding people, or use a hashtag
+to add custom tags which can be used with event timeline searches.  Also if you
+have Slack integrated, you can tag the relevant Slack channels directly from
+the comment. This way the discussion of any issue can happen in context, and
+the comments and thoughts of the engineers working on the issue will be seen
+by anyone viewing that particular graph, at that time, later.&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://static.steinn.org/blog/post/datadog-annotate.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Commenting on an anomaly&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This week I had the pleasure of meeting Alexis (&lt;a
+href=&#34;http://twitter.com/alq&#34;&gt;@alq&lt;/a&gt;) from Datadog again, and he showed
+me this feature amongst others, and also signed me up for notifications when
+they start beta testing new features.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re running an app and would like to give Datadog a try, but feel the
+per-host fee is expensive, it&amp;rsquo;s possible to setup a single datadog statsd
+collection node and make your other nodes send their metrics to that node.
+This would not get you their nice host-level monitoring, but it&amp;rsquo;s a cheap
+way to try.  At QuizUp we monitor all our hosts though, as when running larger
+instances the fee charged per host is trivial for us, so I highly recommend
+that if cost is not an issue.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>redis workload recorder</title>

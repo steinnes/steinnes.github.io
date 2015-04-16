@@ -5,7 +5,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 
-        <title>redis workload recorder &middot; steinn.org</title>
+        <title>Monitoring at QuizUp: Datadog &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
         <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
         <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
@@ -54,9 +54,9 @@
                 <article class="li-article">
                     <header class="li-article-header">
                         
-			    <time class="li-article-date">Thursday, March 19, 2015</time>
+			    <time class="li-article-date">Thursday, April 16, 2015</time>
                         
-                        <h1 class="li-article-title">redis workload recorder</h1>
+                        <h1 class="li-article-title">Monitoring at QuizUp: Datadog</h1>
                         <span class="li-article-taxonomies">
                             
 
@@ -65,39 +65,73 @@
                         
                     </header>
                     <section>
-                        <p>Recently I&rsquo;ve been working on some redis profiling and research, and since
-we run several distinct redis instances at Plain Vanilla (due to reliability
-and configuration reasons) the necessity to record a certain amount of commands
-for several different redis instances became rather apparent.</p>
+                        <p>One of the services we use a lot for monitoring at QuizUp is Datadog.</p>
 
-<p>Rather than relying on my usual <code>redis-cli monitor &gt; /some/file</code> inside a
-screen, then remembering to <code>ctrl+c</code> after say 3600 seconds, I decided to
-script this for the benefit of my future self (and maybe others).</p>
+<p>We use several software-as-a-service&rsquo;s, but this one is one of my absolute
+favorites.  Datadog is an aggregator for StatsD metrics, and StatSD is
+as <a href="/post/reinventing-the-wheel/">I have mentioned before</a>, one
+of my favorite technologies.  The way we use Datadog is both through their
+large set of excellent <a href="https://www.datadoghq.com/integrations/">
+integrations</a>, which retrieve a host of standard metrics from every
+third party service in our stack, but also monitor all of our hosts for
+standard operating system metrics like load average, disk usage, memory
+usage broken down by application, cpu load, etc; and we&rsquo;ve written our
+<a href="https://gist.github.com/steinnes/04d016d19def45f85a18">custom
+integrations</a> if one did not exist before.</p>
 
-<p><script src="https://gist.github.com/ead90afa9882e89b995f.js"></script>
+<p>Additionally we instrument our applications with statsd calls which feed
+important higher level metrics into datadog where all of these can be
+combined in powerful dashboards and used by metric alerts to trigger
+e-mails, pings to Slack or PagerDuty, etc.  These metric alerts are our
+first line of defence, allowing us to detect and fix problems before they
+affect users, so effectively they keep our uptime good.  Whether it&rsquo;s
+a sudden increase in the number of API non-2xx, increased latencies, disks
+filling up, elevated service health transitions, cluster size changes,
+no matter; it&rsquo;s all fed into Datadog and we&rsquo;re alerted from there.  This
+is the kind of service, which if it proved flaky, I would get very
+frustrated very quickly.  It&rsquo;s never been flaky.  No pressure ;-)</p>
+
+<p>The purpose of this post is however to point out a fantastic recent
+feature which I learned about this week, and might just change the way
+we work when examining incidents.  Until now I&rsquo;ve been heavily utilizing
+the Screenshot+Dropbox+Copybuffer integration offered by Dropbox, to basically
+screengrab a portion of a graph or a dashboard, then paste the link to the
+relevant Slack channel and ping people who I believe should investigate.</p>
+
+<p>But there&rsquo;s an easier way to do this, <a href="https://www.datadoghq.com/2015/03/real-time-graph-annotations/">
+click the snapshot icon</a> and tag the corresponding people, or use a hashtag
+to add custom tags which can be used with event timeline searches.  Also if you
+have Slack integrated, you can tag the relevant Slack channels directly from
+the comment. This way the discussion of any issue can happen in context, and
+the comments and thoughts of the engineers working on the issue will be seen
+by anyone viewing that particular graph, at that time, later.</p>
+
+<p>
+<figure >
+    
+        <img src="http://static.steinn.org/blog/post/datadog-annotate.png" />
+    
+    
+    <figcaption>
+        <h4>Commenting on an anomaly</h4>
+        
+    </figcaption>
+    
+</figure>
 </p>
 
-<p>Usage:
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>screen
-<span style="color: #f8f8f2">$ </span>./redis-workload-record.py <span style="color: #ae81ff">3600</span> localhost &gt; 3600-sec-redis-something.log
-^A d
-</pre></div>
-</p>
+<p>This week I had the pleasure of meeting Alexis (<a
+href="http://twitter.com/alq">@alq</a>) from Datadog again, and he showed
+me this feature amongst others, and also signed me up for notifications when
+they start beta testing new features.</p>
 
-<p>This will start a screen where the workload recorder will run for 3600 seconds.
-As can be seen from the code, the exit message will be printed to stderr so
-your output can be safely redirected into a file, which then can be read and
-replayed by something like this:</p>
-
-<p><script src="https://gist.github.com/212f3273d17a7549ac46.js"></script>
-</p>
-
-<p>By running something like this:
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>cat 3600-sec-redis-something.log <span style="color: #f8f8f2">|</span> python redis-pipe-commands.py
-</pre></div>
-</p>
-
-<p>Hope this benefits someone (other than my future self :-)</p>
+<p>If you&rsquo;re running an app and would like to give Datadog a try, but feel the
+per-host fee is expensive, it&rsquo;s possible to setup a single datadog statsd
+collection node and make your other nodes send their metrics to that node.
+This would not get you their nice host-level monitoring, but it&rsquo;s a cheap
+way to try.  At QuizUp we monitor all our hosts though, as when running larger
+instances the fee charged per host is trivial for us, so I highly recommend
+that if cost is not an issue.</p>
 
                     </section>
                 </article>
@@ -109,8 +143,7 @@ replayed by something like this:</p>
             <div class="six columns">
                 <div class="li-pagination-previous">
                     
-                        Later article<br />
-                        <a href="http://steinn.org/post/datadog/"> Monitoring at QuizUp: Datadog</a>
+                        &nbsp;
                     
                 </div>
             </div>
@@ -119,7 +152,7 @@ replayed by something like this:</p>
                     
                         
                             Older article<br />
-                            <a href="http://steinn.org/post/reinventing-the-wheel/"> Reinventing the wheel</a>
+                            <a href="http://steinn.org/post/redis-workload-recorder/"> redis workload recorder</a>
                         
                     
                 </div>
