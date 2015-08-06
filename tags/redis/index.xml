@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redis on steinn.org</title>
+    <link>http://steinn.org/tags/redis/</link>
+    <description>Recent content in Redis on steinn.org</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 Mar 2015 01:11:52 +0000</lastBuildDate>
+    <atom:link href="http://steinn.org/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>redis workload recorder</title>
+      <link>http://steinn.org/post/redis-workload-recorder/</link>
+      <pubDate>Thu, 19 Mar 2015 01:11:52 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/redis-workload-recorder/</guid>
+      <description>&lt;p&gt;Recently I&amp;rsquo;ve been working on some redis profiling and research, and since
+we run several distinct redis instances at Plain Vanilla (due to reliability
+and configuration reasons) the necessity to record a certain amount of commands
+for several different redis instances became rather apparent.&lt;/p&gt;
+
+&lt;p&gt;Rather than relying on my usual &lt;code&gt;redis-cli monitor &amp;gt; /some/file&lt;/code&gt; inside a
+screen, then remembering to &lt;code&gt;ctrl+c&lt;/code&gt; after say 3600 seconds, I decided to
+script this for the benefit of my future self (and maybe others).&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/ead90afa9882e89b995f.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Usage:
+
+$ screen
+$ ./redis-workload-record.py 3600 localhost &gt; 3600-sec-redis-something.log
+^A d
+&lt;/p&gt;
+
+&lt;p&gt;This will start a screen where the workload recorder will run for 3600 seconds.
+As can be seen from the code, the exit message will be printed to stderr so
+your output can be safely redirected into a file, which then can be read and
+replayed by something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/212f3273d17a7549ac46.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;By running something like this:
+
+$ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
+&lt;/p&gt;
+
+&lt;p&gt;Hope this benefits someone (other than my future self :-)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Changing redis maxmemory gradually</title>
+      <link>http://steinn.org/post/redis-gradual-maxmemory/</link>
+      <pubDate>Sun, 01 Mar 2015 16:28:22 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/redis-gradual-maxmemory/</guid>
+      <description>&lt;p&gt;Today we&amp;rsquo;ve been busy migrating some AWS instances at work due to upcoming
+maintenance events in AWS.  One of the instance families we used a lot when
+building QuizUp is the m2 instance family and almost all of our m2 instances
+will require restarts in the next few days.&lt;/p&gt;
+
+&lt;p&gt;On some of these we are running large redis instances with tens of GB of data
+and restarting them is not pain-free, even if we would use the persistence
+features of redis, which work by periodically dumping the entire dataset into
+a &lt;code&gt;dump.rdb&lt;/code&gt; file.  If the keyspace is tens of GB, the process of saving, and
+reading the data is quite slow. Even with a disk subsystem capable of 100MB/s
+sustained reads and writes, saving and reading will take around 500 seconds each.&lt;/p&gt;
+
+&lt;p&gt;In the mean time you probably do not want to serve requests.  While saving
+because you&amp;rsquo;ll write changes that won&amp;rsquo;t be reflected in the &lt;code&gt;dump.rdb&lt;/code&gt; file, so
+you lose data on restart, and while reading the data redis does not allow writes
+(at least by default) and even serving reads can be dangerous if your application
+makes assumptions based on the availability of keys.&lt;/p&gt;
+
+&lt;p&gt;In order to deal nicely with this scenario we basically slave our redis instances
+with newer instance types and then mostly seamlessly failover to them (I can
+write another blog post on that later).  Slaving however is not problem-free.&lt;/p&gt;
+
+&lt;p&gt;Until redis 2.8.18 the only way to slave is for the master to start by making a
+&lt;code&gt;dump.rdb&lt;/code&gt; file, which when complete gets streamed to the slave, which saves it
+to disk, then reads it up from disk, and all writes/changes happening on the
+master are buffered in the mean-time.  This causes a series of problems (more
+&lt;a href=&#34;http://java.dzone.com/articles/top-redis-headaches-devops&#34;&gt;here&lt;/a&gt;)
+which I won&amp;rsquo;t expand on here, but let&amp;rsquo;s suffice to say that the smaller the dataset
+is, the easier time you will have making a slave of it.&lt;/p&gt;
+
+&lt;p&gt;If your dataset is mostly volatile, meaning that it&amp;rsquo;s nice to have the data there
+but not crucial, lowering the maxmemory down to force redis to evict keys is a
+sound strategy to improve your life as a slavemaster.  Today I took a crappy script
+I had which does just that and packaged it a little more nicely and it&amp;rsquo;s on GitHub:
+&lt;a href=&#34;http://github.com/steinnes/redis-memslider&#34;&gt;steinnes/redis-memslider&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

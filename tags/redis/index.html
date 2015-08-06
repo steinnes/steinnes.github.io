@@ -5,13 +5,13 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 
-        <title>redis workload recorder &middot; steinn.org</title>
+        <title>Redis &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
         <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
         <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-144-precomposed.png" sizes="144x144" />
-        <link rel="alternate" href="" type="application/rss+xml" title="steinn.org" />
+        <link rel="alternate" href="http://steinn.org/tags/redis/index.xml" type="application/rss+xml" title="steinn.org" />
     </head>
     <body class="li-body">
 
@@ -44,93 +44,29 @@
 </header>
 
 
-
-
-
-
     <div class="container">
         <div class="row">
             <div class="twelve columns">
-                <article class="li-article">
-                    <header class="li-article-header">
+                <h1>Redis</h1>
+                <ul class="li-article-list">
+                    
                         
-			    <time class="li-article-date">Thursday, March 19, 2015</time>
+                            <li>
+                                <time class="li-article-date">March, 19, 2015</time>
+                                <h4>goo <a href="http://steinn.org/post/redis-workload-recorder/">redis workload recorder</a></h4>
+                            </li>
                         
-                        <h1 class="li-article-title">redis workload recorder</h1>
-                        <span class="li-article-taxonomies">
-                            
-
-                            
-                                with tags
-                                
-                                    <a href="http://steinn.org/tags/redis">redis</a>
-                                
-                            
-                        </span>
-                         - 
-                    </header>
-                    <section>
-                        <p>Recently I&rsquo;ve been working on some redis profiling and research, and since
-we run several distinct redis instances at Plain Vanilla (due to reliability
-and configuration reasons) the necessity to record a certain amount of commands
-for several different redis instances became rather apparent.</p>
-
-<p>Rather than relying on my usual <code>redis-cli monitor &gt; /some/file</code> inside a
-screen, then remembering to <code>ctrl+c</code> after say 3600 seconds, I decided to
-script this for the benefit of my future self (and maybe others).</p>
-
-<p><script src="https://gist.github.com/ead90afa9882e89b995f.js"></script>
-</p>
-
-<p>Usage:
-
-$ screen
-$ ./redis-workload-record.py 3600 localhost > 3600-sec-redis-something.log
-^A d
-</p>
-
-<p>This will start a screen where the workload recorder will run for 3600 seconds.
-As can be seen from the code, the exit message will be printed to stderr so
-your output can be safely redirected into a file, which then can be read and
-replayed by something like this:</p>
-
-<p><script src="https://gist.github.com/212f3273d17a7549ac46.js"></script>
-</p>
-
-<p>By running something like this:
-
-$ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
-</p>
-
-<p>Hope this benefits someone (other than my future self :-)</p>
-
-                    </section>
-                </article>
+                    
+                        
+                            <li>
+                                <time class="li-article-date">March, 1, 2015</time>
+                                <h4>goo <a href="http://steinn.org/post/redis-gradual-maxmemory/">Changing redis maxmemory gradually</a></h4>
+                            </li>
+                        
+                    
+                </ul>
             </div>
         </div>
-
-
-        <div class="twelve columns row li-pagination">
-            <div class="six columns">
-                <div class="li-pagination-previous">
-                    
-                        Later article<br />
-                        <a href="http://steinn.org/post/datadog/"> Monitoring at QuizUp: Datadog</a>
-                    
-                </div>
-            </div>
-            <div class="six columns" style="margin-left: 0; margin-right: 0">
-                <div class="li-pagination-next">
-                    
-                        
-                            Older article<br />
-                            <a href="http://steinn.org/post/reinventing-the-wheel/"> Reinventing the wheel</a>
-                        
-                    
-                </div>
-            </div>
-        </div>
-
     </div>
 
 <footer class="li-page-footer">

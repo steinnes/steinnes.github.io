@@ -5,10 +5,10 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 
-        <title>redis workload recorder &middot; steinn.org</title>
+        <title>redis keysampling &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
-        <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
-        <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
+        <link rel="stylesheet" href="http://localhost:1313//libraries/normalize.3.0.1.css" />
+        <link rel="stylesheet" href="http://localhost:1313//css/lakkris.min.css" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-144-precomposed.png" sizes="144x144" />
         <link rel="alternate" href="" type="application/rss+xml" title="steinn.org" />
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="twelve columns">
                 <div class="li-brand li-left">
-                <a href="http://steinn.org">steinn.org</a></div>
+                <a href="http://localhost:1313/">steinn.org</a></div>
                 <div class="li-menu li-right">
                     <span class="li-menu-icon" onclick="javascript:toggle('menu');">&#9776;</span>
                     <ul id="menu2" class="li-menu-items">
@@ -54,55 +54,69 @@
                 <article class="li-article">
                     <header class="li-article-header">
                         
-			    <time class="li-article-date">Thursday, March 19, 2015</time>
+			    <time class="li-article-date">Sunday, May 10, 2015</time>
                         
-                        <h1 class="li-article-title">redis workload recorder</h1>
+                        <h1 class="li-article-title">redis keysampling</h1>
                         <span class="li-article-taxonomies">
                             
 
                             
                                 with tags
                                 
-                                    <a href="http://steinn.org/tags/redis">redis</a>
+                                    <a href="http://localhost:1313//tags/redis">redis</a>
                                 
                             
                         </span>
                          - 
                     </header>
                     <section>
-                        <p>Recently I&rsquo;ve been working on some redis profiling and research, and since
-we run several distinct redis instances at Plain Vanilla (due to reliability
-and configuration reasons) the necessity to record a certain amount of commands
-for several different redis instances became rather apparent.</p>
+                        <p>One of the most used datastores we have at QuizUp is <a href="http://www.redis.io">Redis</a>.
+Redis is a very versatile in-memory key-value store which offers in our
+opinion a very decent cross section of features, performance and reliability.
+Reliability in Redis, from our perspective, is achieved by having a slave
+instance for each master, which we setup to periodically dump it&rsquo;s dataset
+onto disk.  These dumps we then backup to S3.  When it comes to scaling, we
+have so far not resorted to any particularly dynamic solutions such as
+twemproxy + hashing of keys, or the newly released <a href="http://redis.io/topics/cluster-spec">Redis Cluster</a> features.</p>
 
-<p>Rather than relying on my usual <code>redis-cli monitor &gt; /some/file</code> inside a
-screen, then remembering to <code>ctrl+c</code> after say 3600 seconds, I decided to
-script this for the benefit of my future self (and maybe others).</p>
+<p>In the beginning most QuizUp related data was stored in either of two Redis
+instances, one for data which was considered persistent and one for data which
+was considered volatile.  Persistent data is defined as data which if missing
+from Redis would cause severe runtime issues in the game, while volatile data
+is such that the app does not make hard availability expectations, for example
+cached data which the application knows how to re-generate.</p>
 
-<p><script src="https://gist.github.com/ead90afa9882e89b995f.js"></script>
-</p>
+<p>After the launch of the game the amount of data in especially the &ldquo;volatile&rdquo;
+Redis instance grew very rapidly, and a few days after launch when running into
+memory pressure the issues of running a large number of features on shared
+datastores became apparent.</p>
 
-<p>Usage:
+<p>The main issue encountered was that we had no cheap and easy way to get an
+overview of the keyspace, to determine which subsystems of QuizUp were
+responsible for the greater portions of the datastore usage, or the workload
+coming in.  This &ldquo;volatile&rdquo; instance was mainly used by three separate subsystems
+for ephemeral or non-critical data: <em>games</em>, <em>notifications</em> and <em>cache</em>. Although
+we had a decent hunch which ones were the largest, we could not determine the
+following metrics down to subystem:</p>
 
-$ screen
-$ ./redis-workload-record.py 3600 localhost > 3600-sec-redis-something.log
-^A d
-</p>
+<ul>
+<li>commands / sec</li>
+<li>% of keys in the keyspace</li>
+<li>% of memory in the keyspace</li>
+</ul>
 
-<p>This will start a screen where the workload recorder will run for 3600 seconds.
-As can be seen from the code, the exit message will be printed to stderr so
-your output can be safely redirected into a file, which then can be read and
-replayed by something like this:</p>
+<p>In part due to this lack of visibility, we decided not to approach the problem
+by scaling the system out via twemproxy or the at-the-time unstable Redis-cluster.
+Instead we decided to increase the size of our main volatile redis instance
+(scale vertically, not a sexy solution!) and to start migrating different subsystems
+to their own respective Redis instances.  Also this had the effect that any new
+features or refactored features which required Redis would always get their own
+redis instance(s) to avoid a repeat of the &ldquo;volatile problem&rdquo;.</p>
 
-<p><script src="https://gist.github.com/212f3273d17a7549ac46.js"></script>
-</p>
-
-<p>By running something like this:
-
-$ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
-</p>
-
-<p>Hope this benefits someone (other than my future self :-)</p>
+<p>Later we started analysing the workloads and wondering how we might simplify
+our infrastructure by not only combining the systems we split up from Redis
+&ldquo;volatile&rdquo;, but perhaps also some of the new systems.  Combining their data in
+a single cluster</p>
 
                     </section>
                 </article>
@@ -115,7 +129,7 @@ $ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
                 <div class="li-pagination-previous">
                     
                         Later article<br />
-                        <a href="http://steinn.org/post/datadog/"> Monitoring at QuizUp: Datadog</a>
+                        <a href="http://localhost:1313/post/apns-setup/"> Setting up APNS for iOS</a>
                     
                 </div>
             </div>
@@ -124,7 +138,7 @@ $ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
                     
                         
                             Older article<br />
-                            <a href="http://steinn.org/post/reinventing-the-wheel/"> Reinventing the wheel</a>
+                            <a href="http://localhost:1313/post/datadog/"> Monitoring at QuizUp: Datadog</a>
                         
                     
                 </div>
@@ -169,6 +183,9 @@ $ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
         })();
     -->
     </script>
-    </body>
+    <script data-no-instant>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
 </html>
 
