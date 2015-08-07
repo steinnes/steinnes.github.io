@@ -83,10 +83,10 @@ script this for the benefit of my future self (and maybe others).</p>
 </p>
 
 <p>Usage:
-
-$ screen
-$ ./redis-workload-record.py 3600 localhost > 3600-sec-redis-something.log
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>screen
+<span style="color: #f8f8f2">$ </span>./redis-workload-record.py <span style="color: #ae81ff">3600</span> localhost &gt; 3600-sec-redis-something.log
 ^A d
+</pre></div>
 </p>
 
 <p>This will start a screen where the workload recorder will run for 3600 seconds.
@@ -98,8 +98,8 @@ replayed by something like this:</p>
 </p>
 
 <p>By running something like this:
-
-$ cat 3600-sec-redis-something.log | python redis-pipe-commands.py
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>cat 3600-sec-redis-something.log <span style="color: #f8f8f2">|</span> python redis-pipe-commands.py
+</pre></div>
 </p>
 
 <p>Hope this benefits someone (other than my future self :-)</p>

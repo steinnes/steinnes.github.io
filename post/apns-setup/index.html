@@ -126,11 +126,22 @@ cat com.example.app.key com.example.app.aps_developement.pem &gt;&gt; apns_com.e
 You will use this file later when sending notifications.</p></li>
 
 <li><p>Go into the Apple Developer Console, open &ldquo;Provisioning Profiles&rdquo; click the &ldquo;+&rdquo; icon.  There choose &ldquo;iOS Development&rdquo;, then click continue.
-There choose the App ID created earlier (com.example.app). Click continue.  Then choose the developer certificates, and then the devices, finally click &ldquo;generate&rdquo;.
-Choose a name for it, then download!</p></li>
+There choose the App ID created earlier (com.example.app) and click continue.  Then choose the developer certificates and the devices, finally click &ldquo;generate&rdquo;.
+Choose a name for the profile and then download it.</p></li>
 
 <li><p>Once you&rsquo;ve downloaded your profile (should have a .mobileprovision suffix) drag it into XCode, or open it in XCode somehow.</p></li>
 </ol>
+
+<p>Now what you do with the provisioning profile is something I&rsquo;ll leave to my
+colleague <a href="http://blog.trauzti.com">Trausti</a> to explain, since
+he wrote the client code.  Until then you can check out Ray&rsquo;s excellent guide
+I mentioned here above, and figure out how to get your very own device token.</p>
+
+<p>Once you&rsquo;ve gotten your very own device token for your app using the same bundle
+identifier as you used in my steps above (<code>com.example.app</code>) I am sure you&rsquo;re
+eager to test it.  Since I&rsquo;m mostly using python these days, and Ray&rsquo;s example
+was in PHP (which works fine btw!), I decided to implement an APNS test script
+in python: <a href="http://github.com/steinnes/apnsend">.</p>
 
                     </section>
                 </article>

@@ -84,39 +84,39 @@ and some clever magic to save time when creating new images.</p>
 docker client to create new images, and start them.  The images are created
 using recipe files called &ldquo;Dockerfiles&rdquo;, which look something like this:</p>
 
-<p>
-FROM debian
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y openssh-server
-ADD authorized_keys /root/.ssh/authorized_keys
-CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #66d9ef">FROM</span><span style="color: #e6db74"> debian</span>
+<span style="color: #66d9ef">ENV</span><span style="color: #e6db74"> DEBIAN_FRONTEND noninteractive</span>
+<span style="color: #66d9ef">RUN</span> apt-get update <span style="color: #f92672">&amp;&amp;</span> apt-get install -y openssh-server
+<span style="color: #66d9ef">ADD</span><span style="color: #e6db74"> authorized_keys /root/.ssh/authorized_keys</span>
+<span style="color: #66d9ef">CMD</span><span style="color: #e6db74"> mkdir -p /var/run/sshd &amp;&amp; exec /usr/sbin/sshd -D</span>
+</pre></div>
 </p>
 
 <p>If situated in a folder with a file called <code>Dockerfile</code> with the contents
 from above, we can build an image based on it using the docker command line
 client:</p>
 
-<p>
-$ docker build -t steinn/ssh-docker-1 .
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>docker build -t steinn/ssh-docker-1 .
 Sending build context to Docker daemon  2.56 kB
 Sending build context to Docker daemon
-Step 0 : FROM debian
----> 61f7f4f722fb
-Step 1 : ENV DEBIAN_FRONTEND noninteractive
----> Running in 18c5aa0fa614
----> f7fb51a8a0ec
+Step <span style="color: #ae81ff">0</span> : FROM debian
+---&gt; 61f7f4f722fb
+Step <span style="color: #ae81ff">1</span> : ENV DEBIAN_FRONTEND noninteractive
+---&gt; Running in 18c5aa0fa614
+---&gt; f7fb51a8a0ec
 Removing intermediate container 18c5aa0fa614
-Step 2 : RUN apt-get update && apt-get install -y openssh-server
----> Running in efcaf53c9380
-Get:1 http://http.debian.net wheezy Release.gpg [1655 B]
+Step <span style="color: #ae81ff">2</span> : RUN apt-get update <span style="color: #f92672">&amp;&amp;</span> apt-get install -y openssh-server
+---&gt; Running in efcaf53c9380
+Get:1 http://http.debian.net wheezy Release.gpg <span style="color: #f92672">[</span><span style="color: #ae81ff">1655</span> B<span style="color: #f92672">]</span>
 .... VERY LONG PRINTOUT SUPPRESSED ....
----> 6172db1d263d
+---&gt; 6172db1d263d
 Removing intermediate container efcaf53c9380
-Step 3 : CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
----> Running in 446fb44be23e
----> 914c4e3e928b
+Step <span style="color: #ae81ff">3</span> : CMD mkdir -p /var/run/sshd <span style="color: #f92672">&amp;&amp;</span> <span style="color: #f8f8f2">exec</span> /usr/sbin/sshd -D
+---&gt; Running in 446fb44be23e
+---&gt; 914c4e3e928b
 Removing intermediate container 446fb44be23e
 Successfully built 914c4e3e928b
+</pre></div>
 </p>
 
 <p>Note the <code>---&gt;</code> commands in between &ldquo;Steps&rdquo;.  They are indicating when
@@ -125,26 +125,26 @@ it after every step.  This makes it extremely fast to re-run docker builds
 unless the build steps change.  Here is the output from the same command as
 above, run again, and with <code>time</code> in front:</p>
 
-<p>
-$ time docker build -t steinn/ssh-docker-1 .
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ time </span>docker build -t steinn/ssh-docker-1 .
 Sending build context to Docker daemon  2.56 kB
 Sending build context to Docker daemon
-Step 0 : FROM debian
----> 61f7f4f722fb
-Step 1 : ENV DEBIAN_FRONTEND noninteractive
----> Using cache
----> f7fb51a8a0ec
-Step 2 : RUN apt-get update && apt-get install -y openssh-server
----> Using cache
----> 6172db1d263d
-Step 3 : CMD mkdir -p /var/run/sshd && exec /usr/sbin/sshd -D
----> Using cache
----> 914c4e3e928b
+Step <span style="color: #ae81ff">0</span> : FROM debian
+---&gt; 61f7f4f722fb
+Step <span style="color: #ae81ff">1</span> : ENV DEBIAN_FRONTEND noninteractive
+---&gt; Using cache
+---&gt; f7fb51a8a0ec
+Step <span style="color: #ae81ff">2</span> : RUN apt-get update <span style="color: #f92672">&amp;&amp;</span> apt-get install -y openssh-server
+---&gt; Using cache
+---&gt; 6172db1d263d
+Step <span style="color: #ae81ff">3</span> : CMD mkdir -p /var/run/sshd <span style="color: #f92672">&amp;&amp;</span> <span style="color: #f8f8f2">exec</span> /usr/sbin/sshd -D
+---&gt; Using cache
+---&gt; 914c4e3e928b
 Successfully built 914c4e3e928b
 
 real        0m0.236s
 user        0m0.007s
 sys 0m0.008s
+</pre></div>
 </p>
 
 <p>Let&rsquo;s analyse these messages a bit.  The first one says &ldquo;Sending build
@@ -155,8 +155,8 @@ metadata to port 2375 of it&rsquo;s Docker host.  The Docker host defaults on
 every machine to unix:///var/run/docker.sock, but can be set via the
 DOCKER_HOST environment variable to another machine, such as:</p>
 
-<p>
-$ export DOCKER_HOST=tcp://192.168.22.8:2375
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ export DOCKER_HOST</span><span style="color: #f92672">=</span>tcp://192.168.22.8:2375
+</pre></div>
 </p>
 
 <p>A common approach on OS X machines is to use a set of scripts called
@@ -165,19 +165,19 @@ downloading and running a bare-bones linux image with a docker daemon
 via virtualbox.  It will even tell you which environment variables to
 export.  See:</p>
 
-<p>
-$ boot2docker up
-Waiting for VM and Docker daemon to start...
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>boot2docker up
+Waiting <span style="color: #66d9ef">for</span> VM and Docker daemon to start...
 .o
 Started.
 Writing /Users/ses/.boot2docker/certs/boot2docker-vm/ca.pem
 Writing /Users/ses/.boot2docker/certs/boot2docker-vm/cert.pem
 Writing /Users/ses/.boot2docker/certs/boot2docker-vm/key.pem
 
-To connect the Docker client to the Docker daemon, please set:
-export DOCKER_HOST=tcp://192.168.59.103:2376
-export DOCKER_CERT_PATH=/Users/ses/.boot2docker/certs/boot2docker-vm
-export DOCKER_TLS_VERIFY=1
+To connect the Docker client to the Docker daemon, please <span style="color: #f8f8f2">set</span>:
+<span style="color: #f8f8f2">export DOCKER_HOST</span><span style="color: #f92672">=</span>tcp://192.168.59.103:2376
+<span style="color: #f8f8f2">export DOCKER_CERT_PATH</span><span style="color: #f92672">=</span>/Users/ses/.boot2docker/certs/boot2docker-vm
+<span style="color: #f8f8f2">export DOCKER_TLS_VERIFY</span><span style="color: #f92672">=</span>1
+</pre></div>
 </p>
 
 <h1 id="exercise:458e3be24730f7f94ff6d0ff1bbbd91d">Exercise</h1>
