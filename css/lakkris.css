@@ -497,3 +497,7 @@ code {
 	background-color: #555;
 	border-radius: 6px;
 }
+
+figure img {
+	width: 95%;
+}
