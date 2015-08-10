@@ -94,14 +94,17 @@ stuff must be a violation of developer rights, or something.</p>
 
 <ol>
 <li><p>In your terminal of choice, Generate private key
-<pre>
-openssl genrsa -out com.example.app.key 2048
-</pre></p></li>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%">    openssl genrsa -out com.example.app.key 2048
+</pre></div>
+</p></li>
 
 <li><p>In that same terminal, create a CSR (Certificate Signing Request)
-<pre>
-openssl req -new -key com.example.app.key -out com.example.app.csr -subj &ldquo;/emailAddress=you@example.com/CN=com.example.app/C=IS/O=Example Ltd&rdquo;
-</pre>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>openssl req -new <span style="color: #ae81ff">\</span>
+  -key com.example.app.key <span style="color: #ae81ff">\</span>
+  -out com.example.app.csr <span style="color: #ae81ff">\</span>
+  -subj <span style="color: #e6db74">&quot;/emailAddress=you@example.com/CN=com.example.app/C=IS/O=Example Ltd&quot;</span>
+</pre></div>
+
 I recommend keeping these two files somewhere safe, you&rsquo;ll need them in step 5.</p></li>
 
 <li><p>Log into the Apple Developer console. Go to &ldquo;Certificates, Identifiers &amp; Profiles&rdquo;,
@@ -114,15 +117,15 @@ Use the CSR created earlier (<code>com.example.app.csr</code>) to create the cer
 openssl x509 -in aps_development.cer -inform der -out com.example.app.aps_developement.pem</p></li>
 
 <li><p>Test your key and certificate against APNS:
-<pre>
-openssl s_client -connect gateway.sandbox.push.apple.com:2195 -cert com.example.app.aps_developement.pem -key com.example.app.key
-</pre>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>openssl s_client -connect gateway.sandbox.push.apple.com:2195 -cert com.example.app.aps_developement.pem -key com.example.app.key
+</pre></div>
+
 If everything is OK, you should see a &ldquo;CONNECTED..&rdquo; string, followed by a succesful SSL handshake.  You can stop by sending EOF (^D).</p></li>
 
 <li><p>Combine the private key and the aps_development certificate into a single PEM file:
-<pre>
-cat com.example.app.key com.example.app.aps_developement.pem &gt;&gt; apns_com.example.app_combined.pem
-</pre>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>cat com.example.app.key com.example.app.aps_developement.pem &gt;&gt; apns_com.example.app_combined.pem
+</pre></div>
+
 You will use this file later when sending notifications.</p></li>
 
 <li><p>Go into the Apple Developer Console, open &ldquo;Provisioning Profiles&rdquo; click the &ldquo;+&rdquo; icon.  There choose &ldquo;iOS Development&rdquo;, then click continue.
@@ -141,7 +144,29 @@ I mentioned here above, and figure out how to get your very own device token.</p
 identifier as you used in my steps above (<code>com.example.app</code>) I am sure you&rsquo;re
 eager to test it.  Since I&rsquo;m mostly using python these days, and Ray&rsquo;s example
 was in PHP (which works fine btw!), I decided to implement an APNS test script
-in python: <a href="http://github.com/steinnes/apnsend">.</p>
+in python: <a href="http://github.com/steinnes/apnsend">apnsend</a>.</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>git clone git@github.com:steinnes/apnsend.git
+<span style="color: #f8f8f2">$ cd </span>apnsend
+<span style="color: #f8f8f2">$ </span>make 
+<span style="color: #f8f8f2">$ </span>venv/bin/apnsend apns_com.example.app_combined.pem token <span style="color: #e6db74">&quot;hello from apnsend&quot;</span>
+</pre></div>
+</p>
+
+<p>The end result should look something like this:
+
+<figure >
+    
+        <img src="http://static.steinn.org/blog/post/apnsend-test1.jpg" />
+    
+    
+    <figcaption>
+        <h4>First push notification</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
 
                     </section>
                 </article>
