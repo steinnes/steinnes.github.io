@@ -7,8 +7,8 @@
 
         <title>Setting up APNS for iOS &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
-        <link rel="stylesheet" href="http://localhost:1313//libraries/normalize.3.0.1.css" />
-        <link rel="stylesheet" href="http://localhost:1313//css/lakkris.min.css" />
+        <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
+        <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-144-precomposed.png" sizes="144x144" />
         <link rel="alternate" href="" type="application/rss+xml" title="steinn.org" />
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="twelve columns">
                 <div class="li-brand li-left">
-                <a href="http://localhost:1313/">steinn.org</a></div>
+                <a href="http://steinn.org">steinn.org</a></div>
                 <div class="li-menu li-right">
                     <span class="li-menu-icon" onclick="javascript:toggle('menu');">&#9776;</span>
                     <ul id="menu2" class="li-menu-items">
@@ -54,7 +54,7 @@
                 <article class="li-article">
                     <header class="li-article-header">
                         
-			    <time class="li-article-date">Thursday, August 6, 2015</time>
+			    <time class="li-article-date">Thursday, August 13, 2015</time>
                         
                         <h1 class="li-article-title">Setting up APNS for iOS</h1>
                         <span class="li-article-taxonomies">
@@ -65,7 +65,7 @@
                         
                     </header>
                     <section>
-                        <p>This week we started setting up push notifications on the iOS app we are building
+                        <p>Last week we started setting up push notifications on the iOS app we are building
 at work.  I knew from my work at QuizUp that this was slightly more complicated
 than you&rsquo;d think, but even I was stumped at the complexity Apple front-loads on
 people developing for their platforms.</p>
@@ -73,22 +73,21 @@ people developing for their platforms.</p>
 <p>I read a couple of guides which were either slightly too vague, or really
 detailed but contained directions for outdated versions of one of the many
 graphical user interfaces Apple seems to think developers enjoy (hint: most
-of us don&rsquo;t!).  First I attempted what I usually do: to understand what I am
-doing before committing to any potentially confusing changes.  After spending
-some with this layercake of cryptographic overengineering I abandoned hope of
+of us don not!).</p>
+
+<p>First I attempted what I usually do: to understand what I am doing before
+committing to any potentially confusing changes.  After spending some time
+with this layercake of cryptographic overengineering I abandoned hope of
 abstract understanding and decided to learn by doing.</p>
 
 <p>Thirty hours later I was left with a whole bunch of useless keys,
 certificates, provisioning profiles, app ID&rsquo;s and various unspeakable things
 done to my local keychain and our iOS &ldquo;Certificates, Identifiers &amp; Profiles&rdquo;
-in the Apple Developer Center, I ended up with these steps here.</p>
+in the Apple Developer Center.  But I ended up with these steps here.</p>
 
-<p>I was helped <em>a lot</em> by this excellent guide <a href="http://www.raywenderlich.com/32960/apple-push-notification-services-in-ios-6-tutorial-part-1">here</a>,
-by Ray Wenderlich.  I reworked his steps just a little and after figuring
-out what was being done with the Keychain Access &ldquo;Certificate Assistant&rdquo;,
-decided to share with the world how to create a key and csr with openssl
-on the command line.  Not being able to script or copy-paste this kind of
-stuff must be a violation of developer rights, or something.</p>
+<p>I was helped <em>a lot</em> by this <a href="http://www.raywenderlich.com/32960/apple-push-notification-services-in-ios-6-tutorial-part-1">excellent guide</a>
+by Ray Wenderlich.  I pretty much followed his steps, but use the <code>openssl</code>
+command line tool instead of Apple&rsquo;s &ldquo;Certificate Assistant&rdquo;.</p>
 
 <p>So without further ado, here are the steps I followed:</p>
 
@@ -137,13 +136,13 @@ Choose a name for the profile and then download it.</p></li>
 
 <p>Now what you do with the provisioning profile is something I&rsquo;ll leave to my
 colleague <a href="http://blog.trauzti.com">Trausti</a> to explain, since
-he wrote the client code.  Until then you can check out Ray&rsquo;s excellent guide
-I mentioned here above, and figure out how to get your very own device token.</p>
+he wrote the client code.  Until then you can check out Ray&rsquo;s guide I mentioned
+here above, and figure out how to get your very own device token.</p>
 
-<p>Once you&rsquo;ve gotten your very own device token for your app using the same bundle
-identifier as you used in my steps above (<code>com.example.app</code>) I am sure you&rsquo;re
-eager to test it.  Since I&rsquo;m mostly using python these days, and Ray&rsquo;s example
-was in PHP (which works fine btw!), I decided to implement an APNS test script
+<p>Once you&rsquo;ve gotten your device token for your app using the same bundle
+identifier as you used in my steps above (<code>com.example.app</code>) you&rsquo;ll want to
+test it.  Since I&rsquo;m mostly using python these days, and Ray&rsquo;s example was in
+PHP (which works fine btw!), I decided to implement an APNS test script
 in python: <a href="http://github.com/steinnes/apnsend">apnsend</a>.</p>
 
 <p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>git clone git@github.com:steinnes/apnsend.git
@@ -152,6 +151,10 @@ in python: <a href="http://github.com/steinnes/apnsend">apnsend</a>.</p>
 <span style="color: #f8f8f2">$ </span>venv/bin/apnsend apns_com.example.app_combined.pem token <span style="color: #e6db74">&quot;hello from apnsend&quot;</span>
 </pre></div>
 </p>
+
+<p>The script takes as a parameter the PEM file containing your key and the
+certificate generated by apple, and a device token requested from an app
+with the bundle id, which was built using the provisioning profile.</p>
 
 <p>The end result should look something like this:
 
@@ -187,7 +190,7 @@ in python: <a href="http://github.com/steinnes/apnsend">apnsend</a>.</p>
                     
                         
                             Older article<br />
-                            <a href="http://localhost:1313/post/redis-keysampling/"> redis keysampling</a>
+                            <a href="http://steinn.org/post/datadog/"> Monitoring at QuizUp: Datadog</a>
                         
                     
                 </div>
@@ -232,9 +235,6 @@ in python: <a href="http://github.com/steinnes/apnsend">apnsend</a>.</p>
         })();
     -->
     </script>
-    <script data-no-instant>document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-		+ ':1313/livereload.js?mindelay=10"></'
-        + 'script>')</script></body>
+    </body>
 </html>
 
