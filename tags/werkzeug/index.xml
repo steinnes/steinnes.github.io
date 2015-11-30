@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Werkzeug on steinn.org</title>
+    <link>http://localhost:1313/tags/werkzeug/</link>
+    <description>Recent content in Werkzeug on steinn.org</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 20 Oct 2015 00:58:33 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/werkzeug/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Flask and StatsD</title>
+      <link>http://localhost:1313/post/flask-statsd/</link>
+      <pubDate>Tue, 20 Oct 2015 00:58:33 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/flask-statsd/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve written about &lt;a href=&#34;http://localhost:1313/post/reinventing-the-wheel&#34;&gt;StatsD&lt;/a&gt; &lt;a href=&#34;http://localhost:1313/post/datadog&#34;&gt;before&lt;/a&gt;,
+but it&amp;rsquo;s time to pick up the pen again, at least in the proverbial sense (I&amp;rsquo;m
+typing this on a laptop-chiclet keyboard).&lt;/p&gt;
+
+&lt;p&gt;A few months ago I joined a new company: &lt;a href=&#34;http://takumi.com&#34;&gt;Takumi&lt;/a&gt;
+and we&amp;rsquo;re building an iOS app married to a Python Flask-based backend. From
+many perspectives, a very similar tech stack as we used at QuizUp.  And it&amp;rsquo;s no
+coincidence.  One of the founders of Takumi is &lt;a href=&#34;http://twitter.com/jokull&#34;&gt;Jökull Sólberg&lt;/a&gt;,
+who I worked closely with at QuizUp and as far as I know had a major effect on
+the initial technology stack used there.&lt;/p&gt;
+
+&lt;p&gt;Having used this technology to build a product which got a million active users
+in little over a week, I think it&amp;rsquo;s a fair assumption that we are comfortable
+with the problems and solutions presented on the backend by this choice of tech.
+But it&amp;rsquo;s always possible to tweak, and that&amp;rsquo;s what this blog post is about.&lt;/p&gt;
+
+&lt;p&gt;At QuizUp, one of the lessons I learned, and I&amp;rsquo;ve openly &lt;a href=&#34;https://speakerdeck.com/steinnes/quizup-zero-to-a-million-users-in-8-days?slide=16&#34;&gt;spoken of&lt;/a&gt;
+is the importance of metrics and instrumenting code, specifically using StatsD
+and &lt;a href=&#34;http://www.datadog.com&#34;&gt;Datadog&lt;/a&gt; is my preferred service for
+making those metrics visible and reacting to them.  The way we did this there
+was mainly in two ways:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;A fairly ingenious view decorator which took the metric name as a paremeter,
+wrapped a Flask view and and emitted a statsd timing for the view.  Instant
+visibility into your view latencies!  I credit &lt;a href=&#34;https://twitter.com/johannth&#34;&gt;Jói&lt;/a&gt;,
+the CTO of QuizUp for this.  He&amp;rsquo;s an amazing developer and generally one of the
+nicest human beings you&amp;rsquo;ll ever meet.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;For those views which did a lot of things, we wrote a little context manager
+which could do the same as the view decorator, but for any code block.  This
+piece of code was born as our &amp;ldquo;home&amp;rdquo; endpoint (a big-fat-gimme-everything for
+the client home screen) started becoming slower and slower.  We needed some
+way of monitoring which parts of the response were taking the longest to retrieve
+or generate.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;As I mentioned before, now I&amp;rsquo;m with another company and doing similar things, and
+as I&amp;rsquo;m wont to do, I try and improve/iterate on what I&amp;rsquo;m doing.  At Takumi I
+started implementing a similar view decorator, meaning some potentially repetitive
+code like this everywhere:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/507d894df8f445172c8b.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Basically adding a &lt;code&gt;view_metric&lt;/code&gt; decorator around every view with a metric
+name which should be easily derivable from the view name or request path.  First
+I thought &amp;ldquo;Ah, the metric name should be derived from the request endpoint name!&amp;rdquo;,
+but replacing &lt;code&gt;@view_metric(&amp;quot;...&amp;quot;)&lt;/code&gt; with &lt;code&gt;@view_metric&lt;/code&gt; for over a hundred
+different views still is quite repetitive.&lt;/p&gt;
+
+&lt;p&gt;Thinking back I remembered having used Werkzeug&amp;rsquo;s &lt;a href=&#34;http://werkzeug.pocoo.org/docs/0.10/contrib/profiler/&#34;&gt;ProfilingMiddleware&lt;/a&gt;
+back when performance tuning QuizUp, so I thought I&amp;rsquo;d explore writing my own
+StatsD MiddleWare for Flask.:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/32aad08050f642245dd1.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We launched Takumi on the 11th of November and we&amp;rsquo;re using this code in production,
+and alhtough I have a nagging suspicion I&amp;rsquo;ll discover some unpaid price for this magic,
+we are seeing metrics for all of our views completely automatically :-)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

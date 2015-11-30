@@ -6,8 +6,35 @@
     <description>Recent content in Posts on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Aug 2015 16:37:37 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 01 Oct 2015 11:50:34 +0000</lastBuildDate>
     <atom:link href="http://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Tooling vs. IDEs</title>
+      <link>http://steinn.org/post/ides-tooling/</link>
+      <pubDate>Thu, 01 Oct 2015 11:50:34 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/ides-tooling/</guid>
+      <description>&lt;p&gt;These days I once in a while need to use XCode.  I probably should use it more
+often, and do a lot more work on our iOS codebase.  But I use it rarely and
+the fact remains that the IDE frustrates me to no end every time, and it&amp;rsquo;s not
+just Xcode.&lt;/p&gt;
+
+&lt;p&gt;Why do I not like IDE&amp;rsquo;s?&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a step back and think about the purpose of an IDE, surely they have
+a noble purpose, right? To automate fiddly repetitive tasks which the developer
+takes no pleasure in, and might be error prone as well, right?  It can give you
+great interfaces for detecting errors as you type, suggesting names, fixes, run
+tests, integrate with production and deployments even.  I mean, what&amp;rsquo;s not to
+like?&lt;/p&gt;
+
+&lt;p&gt;Well, basically almost everything.  The problem with powerful IDE&amp;rsquo;s is, like
+many large and overly featureful software projects they get bloated and lose
+focus of their original scope.  But it&amp;rsquo;s not just that.  A good IDE depends on
+a set of strong tools, o&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Setting up APNS for iOS</title>
@@ -100,7 +127,7 @@ in python: &lt;a href=&#34;http://github.com/steinnes/apnsend&#34;&gt;apnsend&lt
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;git clone git@github.com:steinnes/apnsend.git
 &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ cd &lt;/span&gt;apnsend
 &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;make 
-&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;venv/bin/apnsend apns_com.example.app_combined.pem token &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;hello from apnsend&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;venv/bin/apnsend apns_com.example.app_combined.pem token &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;hello from apnsend&amp;quot;&lt;/span&gt; -s
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
