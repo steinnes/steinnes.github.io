@@ -135,6 +135,14 @@ to replace any UUID&rsquo;s in the URL string with <code>id</code>.  Probably a 
 would be to parse the request path and construct it out of safe characters found
 between slashes.  I&rsquo;ll fix these things once I make an actual flask module out of this.</p>
 
+<p>The code above includes one little extra which is a statsd wrapper I wrote to automatically
+add certain tags to all metrics emitted.  That&rsquo;s something I&rsquo;ve done before, and not really
+related to Flask or Werkzeug, but we are using this at Takumi so I decided to include it.
+The way you&rsquo;d use the code above would be like so:</p>
+
+<p><script src="https://gist.github.com/ebe4b170a46b3b74d7da.js"></script>
+</p>
+
 <p>We launched Takumi on the 11th of November and we&rsquo;re using this code in production,
 and alhtough I have a nagging suspicion I&rsquo;ll discover some unpaid price for this magic,
 we are seeing metrics for all of our views completely automatically :-)</p>
