@@ -135,10 +135,19 @@ to replace any UUID&rsquo;s in the URL string with <code>id</code>.  Probably a 
 would be to parse the request path and construct it out of safe characters found
 between slashes.  I&rsquo;ll fix these things once I make an actual flask module out of this.</p>
 
-<p>The code above includes one little extra which is a statsd wrapper I wrote to automatically
-add certain tags to all metrics emitted.  That&rsquo;s something I&rsquo;ve done before, and not really
-related to Flask or Werkzeug, but we are using this at Takumi so I decided to include it.
-The way you&rsquo;d use the code above would be like so:</p>
+<p>The code above includes a couple of little extras:</p>
+
+<ul>
+<li><code>StatsD</code>: a statsd wrapper I wrote to automatically add certain tags to all metrics
+emitted.  That&rsquo;s something I&rsquo;ve done before, and not really related to Flask or Werkzeug,
+but we are using this at Takumi so I decided to include it.</li>
+<li><code>get_cpu_time</code>: the middleware and the context manager both always retrieve the actual
+cpu time and submit that as a separate metric.  This is a neat little trick I suppose most
+devops people will be used to, and is a great indicator of both wasted cpu cycles and external
+bottlenecks.</li>
+</ul>
+
+<p>The way you&rsquo;d use the code above would be like so:</p>
 
 <p><script src="https://gist.github.com/ebe4b170a46b3b74d7da.js"></script>
 </p>
