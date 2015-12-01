@@ -88,8 +88,8 @@ metrics emitted.  That&amp;rsquo;s something I&amp;rsquo;ve done before, and not
 Flask or Werkzeug, but we are using this at Takumi so I decided to include it.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;get_cpu_time&lt;/code&gt;: the middleware and the context manager both always retrieve
 the actual cpu time and submit that as a separate metric.  This is a neat
-little trick I suppose most devops people will be used to, and is a great
-indicator of both wasted cpu cycles and external bottlenecks.&lt;/li&gt;
+little trick I suppose most devops people will be used to, and can be very
+helpful to detect both wasted cpu cycles and external bottlenecks.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Here&amp;rsquo;s a minimal example of how to use the middleware:&lt;/p&gt;
