@@ -38,7 +38,7 @@ making those metrics visible and reacting to them.  We generally did this
 using a combination of two techniques:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;A fairly ingenious view decorator which took the metric name as a paremeter,
+&lt;li&gt;&lt;p&gt;A fairly ingenious view decorator which took the metric name as a parameter,
 wrapped a Flask view and and emitted a statsd timing for the view.  Instant
 visibility into your view latencies!  I credit &lt;a href=&#34;https://twitter.com/johannth&#34;&gt;Jói&lt;/a&gt;,
 the CTO of QuizUp for this.  He&amp;rsquo;s an amazing developer and generally one of the
