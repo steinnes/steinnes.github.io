@@ -7,8 +7,8 @@
 
         <title>Flask and StatsD &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
-        <link rel="stylesheet" href="http://localhost:1313//libraries/normalize.3.0.1.css" />
-        <link rel="stylesheet" href="http://localhost:1313//css/lakkris.min.css" />
+        <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
+        <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-144-precomposed.png" sizes="144x144" />
         <link rel="alternate" href="" type="application/rss+xml" title="steinn.org" />
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="twelve columns">
                 <div class="li-brand li-left">
-                <a href="http://localhost:1313/">steinn.org</a></div>
+                <a href="http://steinn.org">steinn.org</a></div>
                 <div class="li-menu li-right">
                     <span class="li-menu-icon" onclick="javascript:toggle('menu');">&#9776;</span>
                     <ul id="menu2" class="li-menu-items">
@@ -84,8 +84,8 @@ But it&rsquo;s always possible to tweak, and that&rsquo;s what this blog post is
 <p>At QuizUp, one of the lessons I learned, and I&rsquo;ve openly <a href="https://speakerdeck.com/steinnes/quizup-zero-to-a-million-users-in-8-days?slide=16">spoken of</a>
 is the importance of metrics and instrumenting code, specifically using StatsD
 and <a href="http://www.datadog.com">Datadog</a> is my preferred service for
-making those metrics visible and reacting to them.  The way we did this there
-was mainly in two ways:</p>
+making those metrics visible and reacting to them.  We generally did this
+using a combination of two techniques:</p>
 
 <ol>
 <li><p>A fairly ingenious view decorator which took the metric name as a paremeter,
@@ -123,38 +123,42 @@ StatsD MiddleWare for Flask.:</p>
 <p><script src="https://gist.github.com/32aad08050f642245dd1.js"></script>
 </p>
 
-<p>This code assumes a couple of things, first that the app name is <code>takumi</code>.  This
-could easily be changed by supplying the actual Flask app instead of the wsgi_app,
-to the middleware constructor, and then relying on <code>self.app.name</code>.  Also it might
-be a good idea to use that prefix for all metrics, to be able to use this middleware
-for multiple Flask apps all sending metrics to the same statsd service (such as Datadog).</p>
-
-<p>The second assumption is that the only dynamic parts of a URL are UUIDs.  Look at
-<code>def _metric_name_from_path</code> for details, but there I basically use a regular expression
-to replace any UUID&rsquo;s in the URL string with <code>id</code>.  Probably a more robust approach
-would be to parse the request path and construct it out of safe characters found
-between slashes.  I&rsquo;ll fix these things once I make an actual flask module out of this.</p>
+<p>There&rsquo;s one pretty big assumption here, which is that the all dynamic parts of
+a URL are UUIDs.  Look at <code>def _metric_name_from_path</code> for details, but there
+I basically use a regular expression to replace any UUID&rsquo;s in the URL string
+with <code>id</code>.  Probably a more robust approach would be to parse the request path
+and construct it out of safe characters found between slashes.  I&rsquo;ll see if
+there&rsquo;s a smarter way if I make a proper flask plugin out of this.</p>
 
 <p>The code above includes a couple of little extras:</p>
 
 <ul>
-<li><code>StatsD</code>: a statsd wrapper I wrote to automatically add certain tags to all metrics
-emitted.  That&rsquo;s something I&rsquo;ve done before, and not really related to Flask or Werkzeug,
-but we are using this at Takumi so I decided to include it.</li>
-<li><code>get_cpu_time</code>: the middleware and the context manager both always retrieve the actual
-cpu time and submit that as a separate metric.  This is a neat little trick I suppose most
-devops people will be used to, and is a great indicator of both wasted cpu cycles and external
-bottlenecks.</li>
+<li><code>StatsD</code>: a statsd wrapper I wrote to automatically add certain tags to all
+metrics emitted.  That&rsquo;s something I&rsquo;ve done before, and not really related to
+Flask or Werkzeug, but we are using this at Takumi so I decided to include it.</li>
+<li><code>get_cpu_time</code>: the middleware and the context manager both always retrieve
+the actual cpu time and submit that as a separate metric.  This is a neat
+little trick I suppose most devops people will be used to, and is a great
+indicator of both wasted cpu cycles and external bottlenecks.</li>
 </ul>
 
-<p>The way you&rsquo;d use the code above would be like so:</p>
+<p>Here&rsquo;s a minimal example of how to use the middleware:</p>
 
 <p><script src="https://gist.github.com/ebe4b170a46b3b74d7da.js"></script>
 </p>
 
-<p>We launched Takumi on the 11th of November and we&rsquo;re using this code in production,
-and alhtough I have a nagging suspicion I&rsquo;ll discover some unpaid price for this magic,
-we are seeing metrics for all of our views completely automatically :-)</p>
+<p>To time specific blocks of your code you can import <code>TimingStats</code> and use it
+directly:
+<script src="https://gist.github.com/2cd21b3fa2877cdf8ac4.js"></script>
+</p>
+
+<p>We launched Takumi on the 11th of November and we&rsquo;re using this code in
+production, and although I have a nagging suspicion I&rsquo;ll discover some unpaid
+price for this magic, we are seeing metrics for all of our views completely
+automatically :-)</p>
+
+<p>For convenience sake if anyone wants to use this stuff, here&rsquo;s a github repo:
+<a href="https://github.com/steinnes/statsdmiddleware">github.com/steinnes/statsdmiddleware</a>.</p>
 
                     </section>
                 </article>
@@ -175,7 +179,7 @@ we are seeing metrics for all of our views completely automatically :-)</p>
                     
                         
                             Older article<br />
-                            <a href="http://localhost:1313/post/ides-tooling/"> Tooling vs. IDEs</a>
+                            <a href="http://steinn.org/post/apns-setup/"> Setting up APNS for iOS</a>
                         
                     
                 </div>
@@ -217,9 +221,6 @@ we are seeing metrics for all of our views completely automatically :-)</p>
       ga('send', 'pageview');
 
     </script>
-  <script data-no-instant>document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-		+ ':1313/livereload.js?mindelay=10"></'
-        + 'script>')</script></body>
+  </body>
 </html>
 
