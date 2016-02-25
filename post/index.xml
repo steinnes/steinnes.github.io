@@ -15,10 +15,10 @@
       <pubDate>Wed, 24 Feb 2016 23:30:28 +0000</pubDate>
       
       <guid>http://steinn.org/post/ebenv-tool/</guid>
-      <description>&lt;p&gt;At Takumi we use Elastic Beanstalk, which is a nice API/service from AWS
-which strikes a decent balance between a heroku-esque simplified service
-interface for developers, and the hands-on control required by those of
-the devops persuasion, such as myself.&lt;/p&gt;
+      <description>&lt;p&gt;At &lt;a href=&#34;http://takumi.com&#34;&gt;Takumi&lt;/a&gt; we use Elastic Beanstalk, which
+is a nice API/service from AWS which strikes a decent balance between a
+heroku-esque simplified service interface for developers, and the hands-on
+control required by those of the devops persuasion, such as myself.&lt;/p&gt;
 
 &lt;p&gt;One of the main benefits of using Elastic Beanstalk is how quick and easy
 it is to spin up new environments, and I make heavy use of that in my work.
