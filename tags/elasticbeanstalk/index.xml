@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Elasticbeanstalk on steinn.org</title>
+    <link>http://steinn.org/tags/elasticbeanstalk/</link>
+    <description>Recent content in Elasticbeanstalk on steinn.org</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 24 Feb 2016 23:30:28 +0000</lastBuildDate>
+    <atom:link href="http://steinn.org/tags/elasticbeanstalk/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ebenv: Elastic Beanstalk environment copy/dump tool</title>
+      <link>http://steinn.org/post/ebenv-tool/</link>
+      <pubDate>Wed, 24 Feb 2016 23:30:28 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/ebenv-tool/</guid>
+      <description>&lt;p&gt;At Takumi we use Elastic Beanstalk, which is a nice API/service from AWS
+which strikes a decent balance between a heroku-esque simplified service
+interface for developers, and the hands-on control required by those of
+the devops persuasion, such as myself.&lt;/p&gt;
+
+&lt;p&gt;One of the main benefits of using Elastic Beanstalk is how quick and easy
+it is to spin up new environments, and I make heavy use of that in my work.
+Basically what I find relatively often useful is the ability to copying an
+existing environment to test new code with the same configuration and
+resources, with a limited set of clients.  Reasons to do that might be;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Rolling out new features to a limited set of clients&lt;/li&gt;
+&lt;li&gt;Making a new environment for a new developer who wants to test something
+with minimal risk of disruption&lt;/li&gt;
+&lt;li&gt;Making new development environments with &amp;ldquo;production-esque&amp;rdquo; configuration
+as needed, and as the app needs evolve&lt;/li&gt;
+&lt;li&gt;Keeping a separate environment which gets 5% of traffic via weighted DNS
+(canary-ing)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Basically it&amp;rsquo;s a logical conclusion that once you treat your infrastructure
+as programmable outputs which can be recreated and discarded at will, that
+your development patterns and needs evolve to take advantage of that.&lt;/p&gt;
+
+&lt;p&gt;One thing though that slightly bugged me when dealing with Elastic Beanstalk
+was the fact that there was no programmatic way of doing the following:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Dump the environment variables for an app env to an envfile, usable by
+&lt;code&gt;foreman&lt;/code&gt;, &lt;code&gt;honcho&lt;/code&gt; or similar tools&lt;/li&gt;
+&lt;li&gt;Same as &lt;em&gt;1&lt;/em&gt; but an envdir, usable by &lt;code&gt;envdir&lt;/code&gt;, &lt;code&gt;chpst&lt;/code&gt; or similar tools&lt;/li&gt;
+&lt;li&gt;Copy the environment variables (config) from one environment to another&lt;/li&gt;
+&lt;li&gt;Load the environment variables in an envfile or an envdir into an
+existing EB environment&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Recently I was doing a lot of work and needed to replace some of our existing
+environments because we&amp;rsquo;re migrating everything from language specific EB
+environments to the Docker environments, so I basically needed to create new
+EB environments for existing ones, but I couldn&amp;rsquo;t just clone them because
+the platform gets cloned as well and you can&amp;rsquo;t change the platform, only the
+version:&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://static.steinn.org/blog/post/change-platform.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;&amp;#34;changing&amp;#34; a platform version :-)&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Doing this I sorely missed the ability to copy the environment configuration
+because I was essentially making clones of existing environments without
+being able to actually &lt;em&gt;clone&lt;/em&gt; the environments.&lt;/p&gt;
+
+&lt;p&gt;Another semi-common issue I encountered was dumping values from an existing
+environment, in order to start a server locally or on another instance using
+the same configuration.  Intermittently over the last few months I&amp;rsquo;d been
+missing a tool to deal with EB environments programmatically, partially
+because we have a decent amount of configuration values which don&amp;rsquo;t play nice
+with &lt;a href=&#34;https://github.com/gxela/awsebcli&#34;&gt;awsebcli&lt;/a&gt;, and these
+forementioned issues were popping up once in a while.&lt;/p&gt;
+
+&lt;p&gt;I decided to finally do something about it and I wrote &lt;a href=&#34;https://github.com/steinnes/ebenv&#34;&gt;ebenv&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Currently it can handle issues 1-3 here above, and I&amp;rsquo;m planning to add
+counterpart commands to the &lt;code&gt;env&lt;/code&gt; and &lt;code&gt;envdir&lt;/code&gt; commands to easily sync
+local changes (which might even be maintained in a &lt;em&gt;gasp&lt;/em&gt; repository!)
+with a remote Elastic Beanstalk environment.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
