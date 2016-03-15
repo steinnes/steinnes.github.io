@@ -53,6 +53,24 @@
                             <div class="li-article">
                                <article>
     <header>
+        <h2><a href="http://steinn.org/post/elasticbeanstalk-swap/">Adding swap to Elastic Beanstalk </a></h2>
+        <time class="li-article-date">Tuesday, March 15, 2016</time>
+    </header>
+    <section class="li-article-section">
+        If you&rsquo;re using small t2 instances on Elastic Beanstalk which only have 1GB or less of memory, you may run out of memory while doing rare, yet memory intensive tasks such as deploying (and/or building) your app. If your app does not require a lot of memory except during those rare moments, increasing your instance size and being overprovisioned 99% of the time is not a solution which should satisfy a good engineer.
+    </section>
+    <footer>
+        <a href='http://steinn.org/post/elasticbeanstalk-swap/'>More</a>
+    </footer>
+</article>
+
+                            </div>
+                        
+                    
+                        
+                            <div class="li-article">
+                               <article>
+    <header>
         <h2><a href="http://steinn.org/post/ebenv-tool/">ebenv: Elastic Beanstalk environment copy/dump tool </a></h2>
         <time class="li-article-date">Wednesday, February 24, 2016</time>
     </header>
@@ -218,24 +236,6 @@ me being slightly stupid, but also about UDP and how awesome it is :-)</p>
     </section>
     <footer>
         <a href='http://steinn.org/post/brute-force-still-going-strong/'>More</a>
-    </footer>
-</article>
-
-                            </div>
-                        
-                    
-                        
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/utmessan2015/">From Monolith to Services @ QuizUp </a></h2>
-        <time class="li-article-date">Tuesday, February 10, 2015</time>
-    </header>
-    <section class="li-article-section">
-        Last week I did a talk at a local IT conference, UT Messan. The title was the rather inflated &ldquo;From Monolith to Services at Scale: How QuizUp is making the (inevitable?) transition, one endpoint at a time&rdquo;. In it I try to tell the story of how we at QuizUp are transitioning to a more service-oriented architecture, and which steps we decided to take first. The route we chose was to use ZooKeeper as the heart of our system for service registration, discovery and configuration, and then figure out how to route client requests to services running inside Docker containers.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/utmessan2015/'>More</a>
     </footer>
 </article>
 

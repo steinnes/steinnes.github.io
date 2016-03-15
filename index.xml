@@ -6,8 +6,85 @@
     <description>Recent content on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 24 Feb 2016 23:30:28 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 15 Mar 2016 02:02:25 +0000</lastBuildDate>
     <atom:link href="http://steinn.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Adding swap to Elastic Beanstalk</title>
+      <link>http://steinn.org/post/elasticbeanstalk-swap/</link>
+      <pubDate>Tue, 15 Mar 2016 02:02:25 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/elasticbeanstalk-swap/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;re using small t2 instances on Elastic Beanstalk which only have 1GB or
+less of memory, you may run out of memory while doing rare, yet memory intensive
+tasks such as deploying (and/or building) your app.&lt;/p&gt;
+
+&lt;p&gt;If your app does not require a lot of memory except during those rare moments,
+increasing your instance size and being overprovisioned 99% of the time is not a
+solution which should satisfy a good engineer.&lt;/p&gt;
+
+&lt;p&gt;A better solution would be to add swap space to the machine, which on Linux is
+something you can easily do at runtime, even though most distributions will
+guide you towards setting up a separate swap partition.  A swapfile can be
+created with these three simple commands:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #75715e&#34;&gt;# dd if=/dev/zero of=/var/swapfile bs=1M count=1024   # create a 1GB file of 0&amp;#39;s&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# mkswap /var/swapfile&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# swapon /var/swapfile&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The simplest way I know to do this with Elastic Beanstalk is to use &lt;a href=&#34;http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html&#34;&gt;
+.ebextensions&lt;/a&gt;.  Simply create a folder in your elastic beanstalk deployable
+project named &lt;code&gt;.ebextensions&lt;/code&gt;, and within it add two files, the first a more
+elaborate version of the three commands above, something akin to this script,
+and call it &lt;code&gt;setup_swap.sh&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/3a1de7250de10687ade1.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Then add a &lt;code&gt;.config&lt;/code&gt; file which tells EB to run the setup script on deployment.
+The script checks if a swapfile already exists, and if so exits peacefully.&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/1f8a1b44fed4b136005f.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Once done your project directory tree should look partially like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;project
+├── .ebextensions
+│   ├── 01_setup_swap.config
+│   └── setup_swap.sh
+...
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;If you inspect your &lt;code&gt;/var/log/eb-activity.log&lt;/code&gt; you should see something like this:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;2016-03-15T03:43:31.452Z&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; INFO  &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;8044&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;  - &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;Application update/AppDeployStage0/EbExtensionPostBuild&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; : Starting activity...
+&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;2016-03-15T03:43:31.722Z&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; INFO  &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;8044&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;  - &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;Application update/AppDeployStage0/EbExtensionPostBuild/Infra-EmbeddedPostBuild&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; : Starting activity...
+&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;2016-03-15T03:43:31.723Z&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; INFO  &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;8044&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;  - &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;Application update/AppDeployStage0/EbExtensionPostBuild/Infra-EmbeddedPostBuild/postbuild_0_project&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; : Starting activity...
+&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;2016-03-15T03:43:31.943Z&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; INFO  &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;8044&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;  - &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;Application update/AppDeployStage0/EbExtensionPostBuild/Infra-EmbeddedPostBuild/postbuild_0_project/Command 01setup_swap&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; : Starting activity...
+&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;2016-03-15T03:44:24.967Z&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; INFO  &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;8044&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;  - &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;Application update/AppDeployStage0/EbExtensionPostBuild/Infra-EmbeddedPostBuild/postbuild_0_project/Command 01setup_swap&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; : Completed activity. Result:
+  2048+0 records in
+  2048+0 records out
+  &lt;span style=&#34;color: #ae81ff&#34;&gt;2147483648&lt;/span&gt; bytes &lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;2.1 GB&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; copied, 51.3331 s, 41.8 MB/s
+  Setting up swapspace version 1, &lt;span style=&#34;color: #f8f8f2&#34;&gt;size&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2097148&lt;/span&gt; KiB
+  no label, &lt;span style=&#34;color: #f8f8f2&#34;&gt;UUID&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;b4c8a86f-e34d-43f2-8bc0-21c97aa5223e
+
+&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;2016-03-15T03:44:24.967Z&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; INFO  &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;8044&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;  - &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;Application update/AppDeployStage0/EbExtensionPostBuild/Infra-EmbeddedPostBuild/postbuild_0_project&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; : Completed activity.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;And finally you should see your new swap space:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;ec2-user@ip-172-31-40-245 var&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;free
+             total       used       free     shared    buffers     cached
+Mem:       &lt;span style=&#34;color: #ae81ff&#34;&gt;1019452&lt;/span&gt;    &lt;span style=&#34;color: #ae81ff&#34;&gt;1005548&lt;/span&gt;      &lt;span style=&#34;color: #ae81ff&#34;&gt;13904&lt;/span&gt;       &lt;span style=&#34;color: #ae81ff&#34;&gt;2308&lt;/span&gt;        &lt;span style=&#34;color: #ae81ff&#34;&gt;248&lt;/span&gt;      43104
+-/+ buffers/cache:     &lt;span style=&#34;color: #ae81ff&#34;&gt;962196&lt;/span&gt;      57256
+Swap:      &lt;span style=&#34;color: #ae81ff&#34;&gt;2097148&lt;/span&gt;      &lt;span style=&#34;color: #ae81ff&#34;&gt;18868&lt;/span&gt;    2078280
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>ebenv: Elastic Beanstalk environment copy/dump tool</title>
