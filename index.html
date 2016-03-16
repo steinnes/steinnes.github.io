@@ -57,7 +57,7 @@
         <time class="li-article-date">Tuesday, March 15, 2016</time>
     </header>
     <section class="li-article-section">
-        A couple of months ago I wrote about automatically emitting statsd metrics for Flask views using a Werkzeug middleware. There was one rather large caveat to my approach: how I dealt with dynamic URL parameters. Optimally I would have matched the incoming request against the available URL rules or routes in Flask, and used the URL rule metadata to generate a stable metric name. I was under some time pressure and didn&rsquo;t have time to delve into the inner workings of Werkzeug enough to do that.
+        A couple of months ago I wrote about automatically emitting statsd metrics for Flask views using a Werkzeug middleware. There was one rather large caveat though: how I dealt with dynamic URL parameters. Optimally I would have matched the incoming request against the available URL rules or routes in Flask, and used the URL rule metadata to generate a stable metric name. To save time I relied upon the fact that all dynamic URL parts in our API were at the time UUID&rsquo;s.
     </section>
     <footer>
         <a href='http://steinn.org/post/flask-statsd-revisited/'>More</a>
@@ -72,7 +72,7 @@
                                <article>
     <header>
         <h2><a href="http://steinn.org/post/elasticbeanstalk-swap/">Adding swap to Elastic Beanstalk </a></h2>
-        <time class="li-article-date">Tuesday, March 15, 2016</time>
+        <time class="li-article-date">Monday, March 14, 2016</time>
     </header>
     <section class="li-article-section">
         If you&rsquo;re using small t2 instances on Elastic Beanstalk which only have 1GB or less of memory, you may run out of memory while doing rare, yet memory intensive tasks such as deploying (and/or building) your app. If your app does not require a lot of memory except during those rare moments, increasing your instance size and being overprovisioned 99% of the time is not a solution which should satisfy a good engineer.
