@@ -15,8 +15,8 @@
       <pubDate>Tue, 15 Mar 2016 21:28:49 +0000</pubDate>
       
       <guid>http://steinn.org/post/flask-statsd-revisited/</guid>
-      <description>&lt;p&gt;A couple of months ago I wrote about automatically emitting &lt;a href=&#34;http://steinn.org/post/flask-statsd/&#34;&gt;
-statsd metrics&lt;/a&gt; for Flask views using a &lt;a hre_f=&#34;http://werkzeug.pocoo.org/&#34;&gt;Werkzeug&lt;/a&gt;
+      <description>&lt;p&gt;A couple of months ago I wrote about &lt;a href=&#34;http://steinn.org/post/flask-statsd/&#34;&gt;automatically emitting&lt;/a&gt;
+statsd metrics for Flask views using a &lt;a hre_f=&#34;http://werkzeug.pocoo.org/&#34;&gt;Werkzeug&lt;/a&gt;
 middleware.&lt;/p&gt;
 
 &lt;p&gt;There was one rather large caveat though: how I dealt with dynamic URL
