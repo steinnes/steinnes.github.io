@@ -53,6 +53,24 @@
                             <div class="li-article">
                                <article>
     <header>
+        <h2><a href="http://steinn.org/post/flask-statsd-revisited/">Flask and StatsD revisited </a></h2>
+        <time class="li-article-date">Tuesday, March 15, 2016</time>
+    </header>
+    <section class="li-article-section">
+        A couple of months ago I wrote about automatically emitting statsd metrics for Flask views using a Werkzeug middleware. There was one rather large caveat to my approach: how I dealt with dynamic URL parameters. Optimally I would have matched the incoming request against the available URL rules or routes in Flask, and used the URL rule metadata to generate a stable metric name. I was under some time pressure and didn&rsquo;t have time to delve into the inner workings of Werkzeug enough to do that.
+    </section>
+    <footer>
+        <a href='http://steinn.org/post/flask-statsd-revisited/'>More</a>
+    </footer>
+</article>
+
+                            </div>
+                        
+                    
+                        
+                            <div class="li-article">
+                               <article>
+    <header>
         <h2><a href="http://steinn.org/post/elasticbeanstalk-swap/">Adding swap to Elastic Beanstalk </a></h2>
         <time class="li-article-date">Tuesday, March 15, 2016</time>
     </header>
@@ -218,24 +236,6 @@ me being slightly stupid, but also about UDP and how awesome it is :-)</p>
     </section>
     <footer>
         <a href='http://steinn.org/post/docker-workshop/'>More</a>
-    </footer>
-</article>
-
-                            </div>
-                        
-                    
-                        
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/brute-force-still-going-strong/">brute force still going strong </a></h2>
-        <time class="li-article-date">Tuesday, February 10, 2015</time>
-    </header>
-    <section class="li-article-section">
-        While setting up this blog I was looking through my little VMs scattered around different cloud providers to find one which could serve as the A record for steinn.org and redirect traffic to steinnes.github.io. I logged on to one of my digital ocean droplets that I haven&rsquo;t used in a while so I was slightly surprised to see more than 100k lines in /var/log/auth.log. I remember being a teenager and attempting to get access to random systems I stumbled across on the internet.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/brute-force-still-going-strong/'>More</a>
     </footer>
 </article>
 

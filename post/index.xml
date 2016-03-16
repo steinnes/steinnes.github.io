@@ -6,8 +6,39 @@
     <description>Recent content in Posts on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 15 Mar 2016 02:02:25 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 15 Mar 2016 21:28:49 +0000</lastBuildDate>
     <atom:link href="http://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Flask and StatsD revisited</title>
+      <link>http://steinn.org/post/flask-statsd-revisited/</link>
+      <pubDate>Tue, 15 Mar 2016 21:28:49 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/flask-statsd-revisited/</guid>
+      <description>&lt;p&gt;A couple of months ago I wrote about automatically emitting &lt;a href=&#34;http://steinn.org/post/flask-statsd/&#34;&gt;
+statsd metrics&lt;/a&gt; for Flask views using a &lt;a hre_f=&#34;http://werkzeug.pocoo.org/&#34;&gt;Werkzeug&lt;/a&gt;
+middleware.&lt;/p&gt;
+
+&lt;p&gt;There was one rather large caveat to my approach: how I dealt with dynamic
+URL parameters.  Optimally I would have matched the incoming request against
+the available URL rules or routes in Flask, and used the URL rule metadata
+to generate a stable metric name.  I was under some time pressure and didn&amp;rsquo;t
+have time to delve into the inner workings of Werkzeug enough to do that.
+Instead I relied upon the knowledge that all dynamic URL parts in our API
+were at the time UUID&amp;rsquo;s.&lt;/p&gt;
+
+&lt;p&gt;Since then I&amp;rsquo;ve found the time to update it and use the URL map. So here&amp;rsquo;s
+the gist containing the code, and I&amp;rsquo;ve updated the the &lt;a href=&#34;http://steinn.org/post/flask-statsd/&#34;&gt;Flask and StatsD&lt;/a&gt;
+post itself, and the &lt;a href=&#34;https://github.com/steinnes/statsdmiddleware&#34;&gt;example
+github repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let me tell you, it definitely took me a few seconds to realize why
+I was suddenly seeing &lt;code&gt;phpmyadmin.&amp;lt;...&amp;gt;&lt;/code&gt; metrics in the Datadog metric
+explorer.  Then I remembered the technical debt incurred by my initial
+approach.  It&amp;rsquo;s been a little while since we fixed it, but it sure feels
+good to share :-)&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Adding swap to Elastic Beanstalk</title>
@@ -247,12 +278,14 @@ StatsD MiddleWare for Flask.:&lt;/p&gt;
 &lt;p&gt;&lt;script src=&#34;https://gist.github.com/32aad08050f642245dd1.js&#34;&gt;&lt;/script&gt;
 &lt;/p&gt;
 
-&lt;p&gt;There&amp;rsquo;s one pretty big assumption here, which is that the all dynamic parts of
+&lt;p&gt;&lt;s&gt;There&amp;rsquo;s one pretty big assumption here, which is that the all dynamic parts of
 a URL are UUIDs.  Look at &lt;code&gt;def _metric_name_from_path&lt;/code&gt; for details, but there
 I basically use a regular expression to replace any UUID&amp;rsquo;s in the URL string
 with &lt;code&gt;id&lt;/code&gt;.  Probably a more robust approach would be to parse the request path
 and construct it out of safe characters found between slashes.  I&amp;rsquo;ll see if
-there&amp;rsquo;s a smarter way if I make a proper flask plugin out of this.&lt;/p&gt;
+there&amp;rsquo;s a smarter way if I make a proper flask plugin out of this.&lt;/s&gt;
+Update: I rewrote the metric name construction to use the Flask app&amp;rsquo;s URL map.
+See &lt;a href=&#34;http://steinn.org/post/flask-statsd-revisited/&#34;&gt;this post&lt;/a&gt; for details :-)&lt;/p&gt;
 
 &lt;p&gt;The code above includes a couple of little extras:&lt;/p&gt;
 
