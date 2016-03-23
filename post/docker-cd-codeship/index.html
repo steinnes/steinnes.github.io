@@ -7,8 +7,8 @@
 
         <title>Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
-        <link rel="stylesheet" href="http://localhost:1313//libraries/normalize.3.0.1.css" />
-        <link rel="stylesheet" href="http://localhost:1313//css/lakkris.min.css" />
+        <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
+        <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-144-precomposed.png" sizes="144x144" />
         <link rel="alternate" href="" type="application/rss+xml" title="steinn.org" />
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="twelve columns">
                 <div class="li-brand li-left">
-                <a href="http://localhost:1313/">steinn.org</a></div>
+                <a href="http://steinn.org">steinn.org</a></div>
                 <div class="li-menu li-right">
                     <span class="li-menu-icon" onclick="javascript:toggle('menu');">&#9776;</span>
                     <ul id="menu2" class="li-menu-items">
@@ -63,17 +63,17 @@
                             
                                 with tags
                                 
-                                    <a href="http://localhost:1313//tags/docker">docker</a>
+                                    <a href="http://steinn.org/tags/docker">docker</a>
                                 
-                                    <a href="http://localhost:1313//tags/codeship">codeship</a>
+                                    <a href="http://steinn.org/tags/codeship">codeship</a>
                                 
-                                    <a href="http://localhost:1313//tags/ci">ci</a>
+                                    <a href="http://steinn.org/tags/ci">ci</a>
                                 
-                                    <a href="http://localhost:1313//tags/cd">cd</a>
+                                    <a href="http://steinn.org/tags/cd">cd</a>
                                 
-                                    <a href="http://localhost:1313//tags/aws">aws</a>
+                                    <a href="http://steinn.org/tags/aws">aws</a>
                                 
-                                    <a href="http://localhost:1313//tags/elasticbeanstalk">elasticbeanstalk</a>
+                                    <a href="http://steinn.org/tags/elasticbeanstalk">elasticbeanstalk</a>
                                 
                             
                         </span>
@@ -198,9 +198,10 @@ container with a specific tag, to a specific environment.</li>
 </figure>
 </p>
 
-<p>The tool we built for step 4 is relatively trivial to make, the first working
-version took a few hours and within a couple of days we had polished off the
-rough edges of our first cut.  It basically performs the following steps:</p>
+<p>The tool we built for step 4 (represented by a big red button in the image
+above) is relatively trivial to make, the first working version took a few
+hours and within a couple of days we had polished off the rough edges of our
+first cut.  It basically performs the following steps:</p>
 
 <ol>
 <li>Verifies that a docker with the given tag exist in ECR</li>
@@ -291,8 +292,8 @@ our <code>deployment</code> service, with the command required to trigger a depl
 <p>When developing these steps I found that Codeship&rsquo;s <a href="https://codeship.com/documentation/docker/installation/">
 Jet</a> tool was very helpful.  Otherwise be prepared for a lot of commits and
 pushes to GitHub to trigger builds which fail after a few minutes.  Installing
-Jet and being able to through the steps and figure out any errors in your step
-or service definitions was invaluable:</p>
+Jet and being able to execute the steps locally and figure out any errors in
+our step or service definitions within a seconds was a huge help:</p>
 
 <p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>jet steps
 ...
@@ -344,7 +345,7 @@ here, here are some helpful links:</p>
                     
                         
                             Older article<br />
-                            <a href="http://localhost:1313/post/flask-statsd-revisited/"> Flask and StatsD revisited</a>
+                            <a href="http://steinn.org/post/flask-statsd-revisited/"> Flask and StatsD revisited</a>
                         
                     
                 </div>
@@ -386,9 +387,6 @@ here, here are some helpful links:</p>
       ga('send', 'pageview');
 
     </script>
-  <script data-no-instant>document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-		+ ':1313/livereload.js?mindelay=10"></'
-        + 'script>')</script></body>
+  </body>
 </html>
 

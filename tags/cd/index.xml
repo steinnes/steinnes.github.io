@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Cd on steinn.org</title>
-    <link>http://localhost:1313/tags/cd/</link>
+    <link>http://steinn.org/tags/cd/</link>
     <description>Recent content in Cd on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 23 Mar 2016 09:57:15 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/cd/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://steinn.org/tags/cd/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk</title>
-      <link>http://localhost:1313/post/docker-cd-codeship/</link>
+      <link>http://steinn.org/post/docker-cd-codeship/</link>
       <pubDate>Wed, 23 Mar 2016 09:57:15 +0000</pubDate>
       
-      <guid>http://localhost:1313/post/docker-cd-codeship/</guid>
+      <guid>http://steinn.org/post/docker-cd-codeship/</guid>
       <description>
 
 &lt;p&gt;At Takumi we&amp;rsquo;ve been using AWS Elastic Beanstalk for our different app
@@ -133,9 +133,10 @@ container with a specific tag, to a specific environment.&lt;/li&gt;
 &lt;/figure&gt;
 &lt;/p&gt;
 
-&lt;p&gt;The tool we built for step 4 is relatively trivial to make, the first working
-version took a few hours and within a couple of days we had polished off the
-rough edges of our first cut.  It basically performs the following steps:&lt;/p&gt;
+&lt;p&gt;The tool we built for step 4 (represented by a big red button in the image
+above) is relatively trivial to make, the first working version took a few
+hours and within a couple of days we had polished off the rough edges of our
+first cut.  It basically performs the following steps:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Verifies that a docker with the given tag exist in ECR&lt;/li&gt;
@@ -226,8 +227,8 @@ our &lt;code&gt;deployment&lt;/code&gt; service, with the command required to tr
 &lt;p&gt;When developing these steps I found that Codeship&amp;rsquo;s &lt;a href=&#34;https://codeship.com/documentation/docker/installation/&#34;&gt;
 Jet&lt;/a&gt; tool was very helpful.  Otherwise be prepared for a lot of commits and
 pushes to GitHub to trigger builds which fail after a few minutes.  Installing
-Jet and being able to through the steps and figure out any errors in your step
-or service definitions was invaluable:&lt;/p&gt;
+Jet and being able to execute the steps locally and figure out any errors in
+our step or service definitions within a seconds was a huge help:&lt;/p&gt;
 
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;jet steps
 ...
