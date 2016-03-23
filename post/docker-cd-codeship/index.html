@@ -54,7 +54,7 @@
                 <article class="li-article">
                     <header class="li-article-header">
                         
-			    <time class="li-article-date">Wednesday, February 24, 2016</time>
+			    <time class="li-article-date">Wednesday, March 23, 2016</time>
                         
                         <h1 class="li-article-title">Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk</h1>
                         <span class="li-article-taxonomies">
@@ -83,7 +83,7 @@
                         
 
 <p>At Takumi we&rsquo;ve been using AWS Elastic Beanstalk for our different app
-environments, for a variety of reasons.  Most importantly EB solves a lot
+environments for a variety of reasons.  Most importantly EB solves a lot
 of problems straight out of the box, with minimal effort and a low learning
 curve for most developers:</p>
 
@@ -106,10 +106,14 @@ files based on extremely simple templates.</p>
 
 <h1 id="why:ef09fe0db0b31cdf5742f88c311eb1fe">Why ?</h1>
 
-<p>Why deploy dockers, and why pre-build them?  In order to explain that I
-need to explain how the historical Docker support in Elastic Beanstalk has
-functioned.  We&rsquo;ve been using it for a while for our web app, and it
-basically works like this:</p>
+<p>Why deploy dockers, and why pre-build them?  In short, building and deploying
+docker containers allows you to quickly and reliably build an image containing
+all system dependencies and static configuration which can be tested and then
+deployed via a registry to multiple app servers.</p>
+
+<p>Sounds pretty great, right? But I need to explain how the historical Docker
+support in Elastic Beanstalk has functioned.  We&rsquo;ve been using it for a while
+for our web app, and it basically works like this:</p>
 
 <p>If you set your EB environment type to one of the Docker types, and a
 <code>Dockerfile</code> is found in your project root, then upon deployment EB will
@@ -180,16 +184,146 @@ built a little tool which uses <code>git</code>, <code>awsebcli</code> and <code
 container with a specific tag, to a specific environment.</li>
 </ol>
 
-<p>If you want continuous delivery as well, as we do with our dev and staging
-environments (we still pull the trigger manually for production, call me old
-fashioned!) you need a way to allow Codeship, or a similar CI system to deploy
-your code.  Since we had already setup our encrypted credentials with codeship
-to allow them to pull and push from our AWS ECR repositories, we decided to
-build a docker image with the tool from section <em>4</em> here above, and push that
-to a <code>utilities</code> ECR repository which we could then use from Codeship.  Since
-we re-used an IAM identity we setup for Codeship to deploy to Elastic Beanstalk
-the old fashioned way, when we integrated with the ECR, re-using the same
-credentials for our &ldquo;deployment docker&rdquo; was a walk in the park.</p>
+<p>
+<figure >
+    
+        <img src="http://static.steinn.org/blog/post/codeship-docker-ci.png" />
+    
+    
+    <figcaption>
+        <h4>Rough diagram of our setup</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
+<p>The tool we built for step 4 is relatively trivial to make, the first working
+version took a few hours and within a couple of days we had polished off the
+rough edges of our first cut.  It basically performs the following steps:</p>
+
+<ol>
+<li>Verifies that a docker with the given tag exist in ECR</li>
+<li>Verifies that the EB app and environment exist</li>
+<li>Generates a <code>Dockerrun.aws.json</code> specifying the given docker tag</li>
+<li>Stages it for commit</li>
+<li>Deploys the current project to the specified EB app and environment using <code>--staged</code>.</li>
+</ol>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">(</span>venv<span style="color: #f92672">)</span> <span style="color: #f8f8f2">$ </span>dpl deploy takumi-server git_<span style="color: #f8f8f2">$GITHASH</span> takumi-server-dev
+Deploying <span style="color: #e6db74">&#39;takumi-server:git_$GITHASH&#39;</span> to <span style="color: #e6db74">&#39;takumi-srv-dev&#39;</span>
+...
+</pre></div>
+</p>
+
+<h1 id="codeship-settings:ef09fe0db0b31cdf5742f88c311eb1fe">Codeship Settings</h1>
+
+<p>If you have a Docker CI project setup with Codeship, you need to define two
+files: <code>codeship-services.yml</code> and <code>codeship-steps.yml</code>.  The first one
+defines a set of services, at least one of which should be based on your
+application.  Other services we define are a postgres service based on
+a standard postgres image (our integration test suite requires postgres),
+a <code>dockercfg</code> service which we use to authenticate against our docker
+registry (ECR), and finally a deployment docker which we built around our
+tool described in item <em>4</em> in the <em>How</em> section here above.</p>
+
+<h2 id="codeship-steps-yml:ef09fe0db0b31cdf5742f88c311eb1fe">codeship-steps.yml</h2>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #ae81ff">app</span><span style="color: #f8f8f2">:</span>
+  <span style="color: #ae81ff">build</span><span style="color: #f8f8f2">:</span>
+    <span style="color: #ae81ff">image</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">&lt;our-aws-account-id&gt;.dkr.ecr.us-east-1.amazonaws.com/takumi-server</span>
+    <span style="color: #ae81ff">dockerfile_path</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">./Dockerfile</span>
+  <span style="color: #ae81ff">dockercfg_service</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">aws_generator</span>
+  <span style="color: #ae81ff">links</span><span style="color: #f8f8f2">:</span>
+    <span style="color: #f8f8f2">-</span> <span style="color: #ae81ff">postgres</span>
+<span style="color: #ae81ff">aws_generator</span><span style="color: #f8f8f2">:</span>
+  <span style="color: #ae81ff">image</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">codeship/aws-ecr-dockercfg-generator</span>
+  <span style="color: #ae81ff">encrypted_env_file</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">aws_creds.encrypted</span> <span style="color: #75715e"># contains Secret, AccessKey and Region</span>
+  <span style="color: #ae81ff">add_docker</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">true</span>
+<span style="color: #ae81ff">postgres</span><span style="color: #f8f8f2">:</span>
+  <span style="color: #ae81ff">image</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">postgres:9.4</span>
+<span style="color: #ae81ff">deployment</span><span style="color: #f8f8f2">:</span>
+  <span style="color: #ae81ff">image</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">&lt;our-aws-account-id&gt;.dkr.ecr.us-east-1.amazonaws.com/utilities:deployment</span>
+  <span style="color: #ae81ff">encrypted_env_file</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">aws_creds.encrypted</span>
+  <span style="color: #ae81ff">dockercfg_service</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">aws_generator</span>
+</pre></div>
+</p>
+
+<p>Those of you familiar with <code>docker-compose</code> might be familiar with the directives
+here, because <a href="https://codeship.com/documentation/docker/services/">they
+are related</a>.</p>
+
+<p>Now to use these services you need to define your build steps:</p>
+
+<h2 id="codeship-steps-yml-1:ef09fe0db0b31cdf5742f88c311eb1fe">codeship-steps.yml</h2>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">-</span> <span style="color: #ae81ff">type</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">serial</span>
+  <span style="color: #ae81ff">name</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">continuous delivery</span>
+  <span style="color: #ae81ff">steps</span><span style="color: #f8f8f2">:</span>
+    <span style="color: #f8f8f2">-</span> <span style="color: #ae81ff">name</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">test</span>
+      <span style="color: #ae81ff">service</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">app</span>
+      <span style="color: #ae81ff">command</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">make docker_test</span>
+    <span style="color: #f8f8f2">-</span> <span style="color: #ae81ff">name</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">push docker</span>
+      <span style="color: #ae81ff">steps</span><span style="color: #f8f8f2">:</span>
+      <span style="color: #f8f8f2">-</span> <span style="color: #ae81ff">name</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">with githash</span>
+        <span style="color: #ae81ff">type</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">push</span>
+        <span style="color: #ae81ff">service</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">app</span>
+        <span style="color: #ae81ff">registry</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">https://&lt;our-aws-account-id&gt;.dkr.ecr.us-east-1.amazonaws.com</span>
+        <span style="color: #ae81ff">image_name</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">&lt;our-aws-account-id&gt;.dkr.ecr.us-east-1.amazonaws.com/takumi-server</span>
+        <span style="color: #ae81ff">image_tag</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">git_{{ .CommitID }}</span>
+    <span style="color: #f8f8f2">-</span> <span style="color: #ae81ff">name</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">deployment</span>
+      <span style="color: #ae81ff">service</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">deployment</span>
+      <span style="color: #ae81ff">command</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">takumi-server git_{{ .CommitID }} takumi-srv-dev</span>
+      <span style="color: #ae81ff">tag</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">master</span>
+</pre></div>
+</p>
+
+<p>In our steps file we have three steps: <em>test</em>, which starts a docker based on
+the <code>app</code> service with the command <code>make docker_test</code>.  Our Makefile has a
+target which runs the tests with the appropriate configuration for a docker
+which is linked to another docker named <code>postgres</code>.  Our second step is called
+<em>push docker</em> and it specifies how to tag and push the docker built by our
+<code>app</code> service.  Finally we have a <em>deployment</em> step which runs an instance of
+our <code>deployment</code> service, with the command required to trigger a deployment.</p>
+
+<h2 id="developing-steps:ef09fe0db0b31cdf5742f88c311eb1fe">Developing Steps</h2>
+
+<p>When developing these steps I found that Codeship&rsquo;s <a href="https://codeship.com/documentation/docker/installation/">
+Jet</a> tool was very helpful.  Otherwise be prepared for a lot of commits and
+pushes to GitHub to trigger builds which fail after a few minutes.  Installing
+Jet and being able to through the steps and figure out any errors in your step
+or service definitions was invaluable:</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>jet steps
+...
+</pre></div>
+</p>
+
+<h2 id="deployment-step:ef09fe0db0b31cdf5742f88c311eb1fe">Deployment Step</h2>
+
+<p>The deployment step specifies <code>tag: master</code> which means it should only execute
+for our <code>master</code> branch.  Personally I wish Codeship would have named this
+directive <code>branch</code> instead of <code>tag</code>.  That would have been more intuitive for
+our use case, since dockers already have their own tags.  The directive however
+works for git tags as well, so that explains the name.</p>
+
+<p>Since the steps are <code>serial</code>, as specified at the top of the document, each
+step only executes if the previous step was succesful.  For our deployments
+we built a docker around the deployment tool described above, with a helper
+script as an entrypoint which prepends <code>dpl deploy</code>.</p>
+
+<h1 id="further-reading:ef09fe0db0b31cdf5742f88c311eb1fe">Further Reading</h1>
+
+<p>If you&rsquo;re interested in a more complete overview of the technologies mentioned
+here, here are some helpful links:</p>
+
+<ol>
+<li><a href="https://codeship.com/documentation/docker/services">Codeship Services </a></li>
+<li><a href="https://codeship.com/documentation/docker/steps">Codeship Steps</a></li>
+<li><a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker.html">Deploying Elastic Beanstalk Applications from Docker Containers</a></li>
+<li><a href="https://blog.codeship.com/aws-registry/">Integrating Your Codeship CI/CD Pipeline with AWS ECR</a></li>
+<li><a href="https://blog.codeship.com/introducing-jet-codeships-platform-for-docker/">Introducing Jet, Codeship’s Platform for Docker, and the Future of CI</a></li>
+</ol>
 
                     </section>
                 </article>
@@ -201,8 +335,7 @@ credentials for our &ldquo;deployment docker&rdquo; was a walk in the park.</p>
             <div class="six columns">
                 <div class="li-pagination-previous">
                     
-                        Later article<br />
-                        <a href="http://localhost:1313/post/ebenv-tool/"> ebenv: Elastic Beanstalk environment copy/dump tool</a>
+                        &nbsp;
                     
                 </div>
             </div>
@@ -211,7 +344,7 @@ credentials for our &ldquo;deployment docker&rdquo; was a walk in the park.</p>
                     
                         
                             Older article<br />
-                            <a href="http://localhost:1313/post/flask-statsd/"> Flask and StatsD</a>
+                            <a href="http://localhost:1313/post/flask-statsd-revisited/"> Flask and StatsD revisited</a>
                         
                     
                 </div>
