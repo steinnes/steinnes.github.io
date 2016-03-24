@@ -82,10 +82,29 @@
                     <section>
                         
 
-<p>At Takumi we&rsquo;ve been using AWS Elastic Beanstalk for our different app
-environments for a variety of reasons.  Most importantly EB solves a lot
-of problems straight out of the box, with minimal effort and a low learning
-curve for most developers:</p>
+<p>At Takumi we recently started deploying immutable pre-built docker containers
+through our CI system, onto our AWS Elastic Beanstalk nodes, while keeping
+the deployment procedure as simple as:</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">takumi-server (feature-branch) $ git commit -m &quot;Important feature&quot;
+[feature-branch cf7edb2] Important feature
+takumi-server (feature-branch) $ git push origin feature-branch
+</pre></div>
+</p>
+
+<p>&hellip; wait for codeship build</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">takumi-server (feature-branch) $ cd ../takumi-deployment
+takumi-deployment (master) $ dpl deploy takumi-server git_cf7edb2 takumi-server-dev
+Deploying &#39;takumi-server:git_cf7edb2&#39; to &#39;takumi-server-dev&#39;
+...
+</pre></div>
+</p>
+
+<p>We&rsquo;ve been using AWS Elastic Beanstalk for our different app environments
+for a variety of reasons.  Most importantly EB solves a lot of problems
+straight out of the box, with minimal effort and a low learning curve fo
+ most developers:</p>
 
 <ul>
 <li>Autoscale groups + ELB for scale and redundancy</li>
@@ -119,8 +138,8 @@ for our web app, and it basically works like this:</p>
 <code>Dockerfile</code> is found in your project root, then upon deployment EB will
 run something akin to:</p>
 
-<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>docker build -t aws_beanstalk/staging-app .
-<span style="color: #f8f8f2">$ </span>docker run -d aws_beanstalk/staging-app
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">$ docker build -t aws_beanstalk/staging-app .
+$ docker run -d aws_beanstalk/staging-app
 </pre></div>
 </p>
 
@@ -128,11 +147,11 @@ run something akin to:</p>
 an upstream configuration file for nginx, pointing to the local docker and
 the port defined by it&rsquo;s <code>EXPOSE</code> line:</p>
 
-<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>cat elasticbeanstalk-nginx-docker-upstream.conf
-upstream docker <span style="color: #f92672">{</span>
-	server 172.17.0.5:5000<span style="color: #f8f8f2">;</span>
-	keepalive 256<span style="color: #f8f8f2">;</span>
-<span style="color: #f92672">}</span>
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">$ cat elasticbeanstalk-nginx-docker-upstream.conf
+upstream docker {
+	server 172.17.0.5:5000;
+	keepalive 256;
+}
 </pre></div>
 </p>
 
@@ -211,8 +230,8 @@ first cut.  It basically performs the following steps:</p>
 <li>Deploys the current project to the specified EB app and environment using <code>--staged</code>.</li>
 </ol>
 
-<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">(</span>venv<span style="color: #f92672">)</span> <span style="color: #f8f8f2">$ </span>dpl deploy takumi-server git_<span style="color: #f8f8f2">$GITHASH</span> takumi-server-dev
-Deploying <span style="color: #e6db74">&#39;takumi-server:git_$GITHASH&#39;</span> to <span style="color: #e6db74">&#39;takumi-srv-dev&#39;</span>
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">(venv) $ dpl deploy takumi-server git_$GITHASH takumi-server-dev
+Deploying &#39;takumi-server:git_$GITHASH&#39; to &#39;takumi-srv-dev&#39;
 ...
 </pre></div>
 </p>
@@ -287,6 +306,20 @@ which is linked to another docker named <code>postgres</code>.  Our second step 
 <code>app</code> service.  Finally we have a <em>deployment</em> step which runs an instance of
 our <code>deployment</code> service, with the command required to trigger a deployment.</p>
 
+<p>
+<figure >
+    
+        <img src="http://static.steinn.org/blog/post/codeship-cd-build-success.png" />
+    
+    
+    <figcaption>
+        <h4>Pull request merged to master and deployed to dev</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
+
 <h2 id="developing-steps:ef09fe0db0b31cdf5742f88c311eb1fe">Developing Steps</h2>
 
 <p>When developing these steps I found that Codeship&rsquo;s <a href="https://codeship.com/documentation/docker/installation/">
@@ -295,7 +328,7 @@ pushes to GitHub to trigger builds which fail after a few minutes.  Installing
 Jet and being able to execute the steps locally and figure out any errors in
 our step or service definitions within a seconds was a huge help:</p>
 
-<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>jet steps
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">$ jet steps
 ...
 </pre></div>
 </p>

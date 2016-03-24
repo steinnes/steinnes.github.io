@@ -57,7 +57,25 @@
         <time class="li-article-date">Wednesday, March 23, 2016</time>
     </header>
     <section class="li-article-section">
-        At Takumi we&rsquo;ve been using AWS Elastic Beanstalk for our different app environments for a variety of reasons. Most importantly EB solves a lot of problems straight out of the box, with minimal effort and a low learning curve for most developers: Autoscale groups + ELB for scale and redundancy Deploy git commits and branches with easy CLI commands Easy to recreate and redeploy variations of environments However we&rsquo;ve run into our fair share of niggling little issues, some of which we&rsquo;ve already solved, some which we are in the process of solving and finally some which we won&rsquo;t bother trying to solve.
+        <p>At Takumi we recently started deploying immutable pre-built docker containers
+through our CI system, onto our AWS Elastic Beanstalk nodes, while keeping
+the deployment procedure as simple as:</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">takumi-server (feature-branch) $ git commit -m &quot;Important feature&quot;
+[feature-branch cf7edb2] Important feature
+takumi-server (feature-branch) $ git push origin feature-branch
+</pre></div>
+</p>
+
+<p>&hellip; wait for codeship build</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">takumi-server (feature-branch) $ cd ../takumi-deployment
+takumi-deployment (master) $ dpl deploy takumi-server git_cf7edb2 takumi-server-dev
+Deploying &#39;takumi-server:git_cf7edb2&#39; to &#39;takumi-server-dev&#39;
+...
+</pre></div>
+</p>
+
     </section>
     <footer>
         <a href='http://steinn.org/post/docker-cd-codeship/'>More</a>

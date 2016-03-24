@@ -17,10 +17,29 @@
       <guid>http://steinn.org/post/docker-cd-codeship/</guid>
       <description>
 
-&lt;p&gt;At Takumi we&amp;rsquo;ve been using AWS Elastic Beanstalk for our different app
-environments for a variety of reasons.  Most importantly EB solves a lot
-of problems straight out of the box, with minimal effort and a low learning
-curve for most developers:&lt;/p&gt;
+&lt;p&gt;At Takumi we recently started deploying immutable pre-built docker containers
+through our CI system, onto our AWS Elastic Beanstalk nodes, while keeping
+the deployment procedure as simple as:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;takumi-server (feature-branch) $ git commit -m &amp;quot;Important feature&amp;quot;
+[feature-branch cf7edb2] Important feature
+takumi-server (feature-branch) $ git push origin feature-branch
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&amp;hellip; wait for codeship build&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;takumi-server (feature-branch) $ cd ../takumi-deployment
+takumi-deployment (master) $ dpl deploy takumi-server git_cf7edb2 takumi-server-dev
+Deploying &amp;#39;takumi-server:git_cf7edb2&amp;#39; to &amp;#39;takumi-server-dev&amp;#39;
+...
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ve been using AWS Elastic Beanstalk for our different app environments
+for a variety of reasons.  Most importantly EB solves a lot of problems
+straight out of the box, with minimal effort and a low learning curve fo
+ most developers:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Autoscale groups + ELB for scale and redundancy&lt;/li&gt;
@@ -54,8 +73,8 @@ for our web app, and it basically works like this:&lt;/p&gt;
 &lt;code&gt;Dockerfile&lt;/code&gt; is found in your project root, then upon deployment EB will
 run something akin to:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;docker build -t aws_beanstalk/staging-app .
-&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;docker run -d aws_beanstalk/staging-app
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;$ docker build -t aws_beanstalk/staging-app .
+$ docker run -d aws_beanstalk/staging-app
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -63,11 +82,11 @@ run something akin to:&lt;/p&gt;
 an upstream configuration file for nginx, pointing to the local docker and
 the port defined by it&amp;rsquo;s &lt;code&gt;EXPOSE&lt;/code&gt; line:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;cat elasticbeanstalk-nginx-docker-upstream.conf
-upstream docker &lt;span style=&#34;color: #f92672&#34;&gt;{&lt;/span&gt;
-	server 172.17.0.5:5000&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-	keepalive 256&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-&lt;span style=&#34;color: #f92672&#34;&gt;}&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;$ cat elasticbeanstalk-nginx-docker-upstream.conf
+upstream docker {
+	server 172.17.0.5:5000;
+	keepalive 256;
+}
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -146,8 +165,8 @@ first cut.  It basically performs the following steps:&lt;/p&gt;
 &lt;li&gt;Deploys the current project to the specified EB app and environment using &lt;code&gt;--staged&lt;/code&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;venv&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;dpl deploy takumi-server git_&lt;span style=&#34;color: #f8f8f2&#34;&gt;$GITHASH&lt;/span&gt; takumi-server-dev
-Deploying &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;takumi-server:git_$GITHASH&amp;#39;&lt;/span&gt; to &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;takumi-srv-dev&amp;#39;&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;(venv) $ dpl deploy takumi-server git_$GITHASH takumi-server-dev
+Deploying &amp;#39;takumi-server:git_$GITHASH&amp;#39; to &amp;#39;takumi-srv-dev&amp;#39;
 ...
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
@@ -222,6 +241,20 @@ which is linked to another docker named &lt;code&gt;postgres&lt;/code&gt;.  Our 
 &lt;code&gt;app&lt;/code&gt; service.  Finally we have a &lt;em&gt;deployment&lt;/em&gt; step which runs an instance of
 our &lt;code&gt;deployment&lt;/code&gt; service, with the command required to trigger a deployment.&lt;/p&gt;
 
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://static.steinn.org/blog/post/codeship-cd-build-success.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Pull request merged to master and deployed to dev&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
 &lt;h2 id=&#34;developing-steps:ef09fe0db0b31cdf5742f88c311eb1fe&#34;&gt;Developing Steps&lt;/h2&gt;
 
 &lt;p&gt;When developing these steps I found that Codeship&amp;rsquo;s &lt;a href=&#34;https://codeship.com/documentation/docker/installation/&#34;&gt;
@@ -230,7 +263,7 @@ pushes to GitHub to trigger builds which fail after a few minutes.  Installing
 Jet and being able to execute the steps locally and figure out any errors in
 our step or service definitions within a seconds was a huge help:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;jet steps
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;$ jet steps
 ...
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
