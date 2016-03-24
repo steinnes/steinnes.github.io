@@ -17,7 +17,7 @@
       <guid>http://steinn.org/post/docker-cd-codeship/</guid>
       <description>
 
-&lt;p&gt;At Takumi we recently started deploying immutable pre-built docker containers
+&lt;p&gt;At &lt;a href=&#34;http://takumi.com/&#34;&gt;Takumi&lt;/a&gt; we recently started deploying immutable pre-built docker containers
 through our CI system, onto our AWS Elastic Beanstalk nodes, while keeping
 the deployment procedure as simple as:&lt;/p&gt;
 
