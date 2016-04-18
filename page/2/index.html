@@ -44,220 +44,119 @@
 </header>
 
 
+
+
     <div class="container">
         <div class="row">
             <div class="twelve columns">
                 <div class="li-main-article-list">
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/docker-cd-codeship/">Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk </a></h2>
-        <time class="li-article-date">Wednesday, March 23, 2016</time>
-    </header>
-    <section class="li-article-section">
-        <p>At <a href="http://takumi.com/">Takumi</a> we recently started deploying immutable pre-built docker containers
-through our CI system, onto our AWS Elastic Beanstalk nodes, while keeping
-the deployment procedure as simple as:</p>
-
-<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">takumi-server (feature-branch) $ git commit -m &quot;Important feature&quot;
-[feature-branch cf7edb2] Important feature
-takumi-server (feature-branch) $ git push origin feature-branch
-</pre></div>
-</p>
-
-<p>&hellip; wait for codeship build</p>
-
-<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">takumi-server (feature-branch) $ cd ../takumi-deployment
-takumi-deployment (master) $ dpl deploy takumi-server git_cf7edb2 takumi-server-dev
-Deploying &#39;takumi-server:git_cf7edb2&#39; to &#39;takumi-server-dev&#39;
-...
-</pre></div>
-</p>
-
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/docker-cd-codeship/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/flask-statsd-revisited/">Flask and StatsD revisited </a></h2>
-        <time class="li-article-date">Tuesday, March 15, 2016</time>
-    </header>
-    <section class="li-article-section">
-        A couple of months ago I wrote about automatically emitting statsd metrics for Flask views using a Werkzeug middleware. There was one rather large caveat though: how I dealt with dynamic URL parameters. Optimally I would have matched the incoming request against the available URL rules or routes in Flask, and used the URL rule metadata to generate a stable metric name. To save time I relied upon the fact that all dynamic URL parts in our API were at the time UUID&rsquo;s.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/flask-statsd-revisited/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/elasticbeanstalk-swap/">Adding swap to Elastic Beanstalk </a></h2>
-        <time class="li-article-date">Monday, March 14, 2016</time>
-    </header>
-    <section class="li-article-section">
-        If you&rsquo;re using small t2 instances on Elastic Beanstalk which only have 1GB or less of memory, you may run out of memory while doing rare, yet memory intensive tasks such as deploying (and/or building) your app. If your app does not require a lot of memory except during those rare moments, increasing your instance size and being overprovisioned 99% of the time is not a solution which should satisfy a good engineer.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/elasticbeanstalk-swap/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/ebenv-tool/">ebenv: Elastic Beanstalk environment copy/dump tool </a></h2>
-        <time class="li-article-date">Wednesday, February 24, 2016</time>
-    </header>
-    <section class="li-article-section">
-        At Takumi we use Elastic Beanstalk, which is a nice API/service from AWS which strikes a decent balance between a heroku-esque simplified service interface for developers, and the hands-on control required by those of the devops persuasion, such as myself. One of the main benefits of using Elastic Beanstalk is how quick and easy it is to spin up new environments, and I make heavy use of that in my work.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/ebenv-tool/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/flask-statsd/">Flask and StatsD </a></h2>
-        <time class="li-article-date">Monday, November 30, 2015</time>
-    </header>
-    <section class="li-article-section">
-        I&rsquo;ve written about StatsD before, but it&rsquo;s time to pick up the pen again, at least in the proverbial sense (I&rsquo;m typing this on a laptop-chiclet keyboard). A few months ago I joined a new company: Takumi and we&rsquo;re building an iOS app married to a Python Flask-based backend. From many perspectives, a very similar tech stack as we used at QuizUp. And it&rsquo;s no coincidence. One of the founders of Takumi is Jökull Sólberg, who I worked closely with at QuizUp and as far as I know had a major effect on the initial technology stack used there.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/flask-statsd/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/apns-setup/">Setting up APNS for iOS </a></h2>
-        <time class="li-article-date">Thursday, August 13, 2015</time>
-    </header>
-    <section class="li-article-section">
-        <p>Last week we started setting up push notifications on the iOS app we are building
-at work.  I knew from my time at QuizUp that this is more complicated than
-you&rsquo;d think, but still I was surprised at the complexity Apple front-loads on
-people developing for their platforms.</p>
-
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/apns-setup/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/datadog/">Monitoring at QuizUp: Datadog </a></h2>
-        <time class="li-article-date">Thursday, April 16, 2015</time>
-    </header>
-    <section class="li-article-section">
-        One of the services we use a lot for monitoring at QuizUp is Datadog. We use several software-as-a-service&rsquo;s, but this one is one of my absolute favorites. Datadog is an aggregator for StatsD metrics, and StatSD is as I have mentioned before, one of my favorite technologies. The way we use Datadog is both through their large set of excellent integrations, which retrieve a host of standard metrics from every third party service in our stack, but also monitor all of our hosts for standard operating system metrics like load average, disk usage, memory usage broken down by application, cpu load, etc; and we&rsquo;ve written our custom integrations if one did not exist before.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/datadog/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/redis-workload-recorder/">redis workload recorder </a></h2>
-        <time class="li-article-date">Thursday, March 19, 2015</time>
-    </header>
-    <section class="li-article-section">
-        <p>Recently I&rsquo;ve been working on some redis profiling and research, and since
-we run several distinct redis instances at Plain Vanilla (due to reliability
-and configuration reasons) the necessity to record a certain amount of commands
-for several different redis instances became rather apparent.</p>
-
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/redis-workload-recorder/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
-    <header>
-        <h2><a href="http://steinn.org/post/reinventing-the-wheel/">Reinventing the wheel </a></h2>
-        <time class="li-article-date">Monday, March 9, 2015</time>
-    </header>
-    <section class="li-article-section">
-        <p>We all tend to reinvent the wheel once in a while, and often it&rsquo;s just
-a question of not having found the right tool with a quick search, or
-better: we prefer doing something differently and/or we enjoy the process
-of building something just for the heck of it.  This is a small story of
-me being slightly stupid, but also about UDP and how awesome it is :-)</p>
-
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/reinventing-the-wheel/'>More</a>
-    </footer>
-</article>
-
-                            </div>
+                            
                         
                     
                         
-                            <div class="li-article">
-                               <article>
+                            
+                        
+                    
+                        
+                            
+                                
+                                    <div class="li-article">
+                                       <article>
     <header>
-        <h2><a href="http://steinn.org/post/redis-gradual-maxmemory/">Changing redis maxmemory gradually </a></h2>
-        <time class="li-article-date">Sunday, March 1, 2015</time>
+        <h2><a href="http://steinn.org/post/docker-workshop/">Docker Workshop </a></h2>
+        <time class="li-article-date">Saturday, February 14, 2015</time>
     </header>
     <section class="li-article-section">
-        Today we&rsquo;ve been busy migrating some AWS instances at work due to upcoming maintenance events in AWS. One of the instance families we used a lot when building QuizUp is the m2 instance family and almost all of our m2 instances will require restarts in the next few days. On some of these we are running large redis instances with tens of GB of data and restarting them is not pain-free, even if we would use the persistence features of redis, which work by periodically dumping the entire dataset into a dump.rdb file.
+        These are the instructions/background I wrote for a workshop on Docker when we started deploying the backend services for QuizUp as Dockers, in November 2014. What is Docker? It is a server and client for creating lightweight machine images, known as containers. Currently these images can be run on Linux, in what are known as LinuX Containers (LXC). Docker uses AUFS (a union file system) and some clever magic to save time when creating new images.
     </section>
     <footer>
-        <a href='http://steinn.org/post/redis-gradual-maxmemory/'>More</a>
+        <a href='http://steinn.org/post/docker-workshop/'>More</a>
     </footer>
 </article>
 
-                            </div>
+                                    </div>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                    <div class="li-article">
+                                       <article>
+    <header>
+        <h2><a href="http://steinn.org/post/brute-force-still-going-strong/">brute force still going strong </a></h2>
+        <time class="li-article-date">Tuesday, February 10, 2015</time>
+    </header>
+    <section class="li-article-section">
+        While setting up this blog I was looking through my little VMs scattered around different cloud providers to find one which could serve as the A record for steinn.org and redirect traffic to steinnes.github.io. I logged on to one of my digital ocean droplets that I haven&rsquo;t used in a while so I was slightly surprised to see more than 100k lines in /var/log/auth.log. I remember being a teenager and attempting to get access to random systems I stumbled across on the internet.
+    </section>
+    <footer>
+        <a href='http://steinn.org/post/brute-force-still-going-strong/'>More</a>
+    </footer>
+</article>
+
+                                    </div>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                    <div class="li-article">
+                                       <article>
+    <header>
+        <h2><a href="http://steinn.org/post/utmessan2015/">From Monolith to Services @ QuizUp </a></h2>
+        <time class="li-article-date">Tuesday, February 10, 2015</time>
+    </header>
+    <section class="li-article-section">
+        Last week I did a talk at a local IT conference, UT Messan. The title was the rather inflated &ldquo;From Monolith to Services at Scale: How QuizUp is making the (inevitable?) transition, one endpoint at a time&rdquo;. In it I try to tell the story of how we at QuizUp are transitioning to a more service-oriented architecture, and which steps we decided to take first. The route we chose was to use ZooKeeper as the heart of our system for service registration, discovery and configuration, and then figure out how to route client requests to services running inside Docker containers.
+    </section>
+    <footer>
+        <a href='http://steinn.org/post/utmessan2015/'>More</a>
+    </footer>
+</article>
+
+                                    </div>
+                                
+                            
+                        
+                    
                         
                     
                 </div>
