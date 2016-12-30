@@ -57,6 +57,28 @@
                                     <div class="li-article">
                                        <article>
     <header>
+        <h2><a href="http://steinn.org/post/ipv6-with-cloudfront-on-aws/">Terminating IPv6 on AWS </a></h2>
+        <time class="li-article-date">Friday, December 30, 2016</time>
+    </header>
+    <section class="li-article-section">
+        Background This summer Apple announced that they would require all apps submitted to the App Store to support IPv6. At Takumi we were not concerned, as in the past I had noticed Amazon ELB&rsquo;s have both AAAA records and a nice &ldquo;dualstack&rdquo; DNS name which had both A records and AAAA records for the underlying hosts &ndash; and the Takumi API is accessed through an AWS ELB. Besides our app not hardcoding any reliance on IPv4 (such as addresses or low level packet construction), we felt no pressure to reassess our connectivity.
+    </section>
+    <footer>
+        <a href='http://steinn.org/post/ipv6-with-cloudfront-on-aws/'>More</a>
+    </footer>
+</article>
+
+                                    </div>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                    <div class="li-article">
+                                       <article>
+    <header>
         <h2><a href="http://steinn.org/post/docker-cd-codeship/">Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk </a></h2>
         <time class="li-article-date">Wednesday, March 23, 2016</time>
     </header>
@@ -282,22 +304,6 @@ me being slightly stupid, but also about UDP and how awesome it is :-)</p>
                     
                         
                             
-                                
-                                    <div class="li-article">
-                                       <article>
-    <header>
-        <h2><a href="http://steinn.org/post/redis-gradual-maxmemory/">Changing redis maxmemory gradually </a></h2>
-        <time class="li-article-date">Sunday, March 1, 2015</time>
-    </header>
-    <section class="li-article-section">
-        Today we&rsquo;ve been busy migrating some AWS instances at work due to upcoming maintenance events in AWS. One of the instance families we used a lot when building QuizUp is the m2 instance family and almost all of our m2 instances will require restarts in the next few days. On some of these we are running large redis instances with tens of GB of data and restarting them is not pain-free, even if we would use the persistence features of redis, which work by periodically dumping the entire dataset into a dump.rdb file.
-    </section>
-    <footer>
-        <a href='http://steinn.org/post/redis-gradual-maxmemory/'>More</a>
-    </footer>
-</article>
-
-                                    </div>
                                 
                             
                         

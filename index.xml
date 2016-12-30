@@ -6,8 +6,198 @@
     <description>Recent content on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Mar 2016 09:57:15 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 30 Dec 2016 13:42:23 +0000</lastBuildDate>
     <atom:link href="http://steinn.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Terminating IPv6 on AWS</title>
+      <link>http://steinn.org/post/ipv6-with-cloudfront-on-aws/</link>
+      <pubDate>Fri, 30 Dec 2016 13:42:23 +0000</pubDate>
+      
+      <guid>http://steinn.org/post/ipv6-with-cloudfront-on-aws/</guid>
+      <description>
+
+&lt;h2 id=&#34;background:b772dd71da68016dc4c081d97a69b162&#34;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;This summer Apple announced that they would require all apps submitted to the
+App Store to support IPv6.  At Takumi we were not concerned, as in the
+past I had noticed Amazon ELB&amp;rsquo;s have both AAAA records and a nice
+&amp;ldquo;dualstack&amp;rdquo; DNS name which had both A records and AAAA records for the
+underlying hosts &amp;ndash; and the Takumi API is accessed through an AWS ELB.
+Besides our app not hardcoding any reliance on IPv4 (such as addresses or low
+level packet construction), we felt no pressure to reassess our connectivity.&lt;/p&gt;
+
+&lt;p&gt;Then about a month ago we got our first app rejection because our API was not
+reachable in an IPv6-only network Apple have setup for testing.  To my surprise
+and despair there were no AAAA records, or a &amp;ldquo;dualstack&amp;rdquo; DNS name on any
+of our ELBs.  Also I was surprised because our DNS setup did not include any
+AAAA records, it seemed Apple was testing this without using a DNS64/NAT64
+network.&lt;/p&gt;
+
+&lt;p&gt;Quickly I found out that the reason for no AAAA records is that the Virtual
+Private Cloud offering of AWS does not support IPv6 (some support has been
+rolled out now in select regions), and I surmise that any resources created
+to wrap publicly accessible VPC instances are thus IPv4-only as well.  All
+of our ELB&amp;rsquo;s and ALB&amp;rsquo;s have only A records, and no AAAA records associated
+with their DNS names.  So the only way for an IPv6 device to access them
+is via (local) DNS64/NAT64.&lt;/p&gt;
+
+&lt;p&gt;To sum up: because we are a new customer of AWS, we are forced to use the VPC
+offering, which replaces EC2-Classic (as it&amp;rsquo;s now known), and this newer
+compute cloud does not support IPv6, which there is growing pressure around
+the internet to fully support.  I was not pleased, and we are not the &lt;a
+href=&#34;https://forums.aws.amazon.com/message.jspa?messageID=709638#718517&#34;&gt;first&lt;/a&gt;
+app &lt;a href=&#34;https://forums.developer.apple.com/thread/48314&#34;&gt;developer&lt;/a&gt; to get
+frustrated by this.  And of course this &lt;a
+href=&#34;http://timv.me/hacking/apple-aws-and-ipv6-testing/&#34;&gt;shouldn&amp;rsquo;t happen&lt;/a&gt;
+unless your app has some unusual reliance on IPv4.&lt;/p&gt;
+
+&lt;p&gt;I however try and avoid getting submissions approved by explaining to the app
+reviewer that they should test things differently, and to be fair: if someone
+attempts to access our app via an IPv6-only network it wouldn&amp;rsquo;t work. So
+regardless of Apple&amp;rsquo;s testing procedures or fairness, getting this connectivity
+issue fixed seemed like the quickest and best solution.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-solution:b772dd71da68016dc4c081d97a69b162&#34;&gt;First solution&lt;/h2&gt;
+
+&lt;p&gt;A quick solution was to find a cloud provider which could provide a publicly
+accessible (IPv4 and IPv6) machine, and Digital Ocean became the provider of
+choice.  I setup a debian machine there, an nginx proxy listening on the IPv6
+interface  which proxied to IPv4 backends using our ELB CNAME.&lt;/p&gt;
+
+&lt;p&gt;&lt;figure&gt;
+    &lt;h4&gt;Workaround using Digital Ocean proxy node&lt;/h4&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/aws-cf-ipv6-1.png&#34;  /&gt;
+    &lt;figcaption&gt;
+        &lt;h5&gt;Do those A records smell a little funky?&lt;/h5&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This simple solution only took an hour or so to setup, and got our app approved
+without any lengthy dialogue with Apple.  The nginx configuration is very simple,
+as it&amp;rsquo;s simply functioning as a TCP proxy:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/c6f0073485593c05fee51a123eadab91.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;caveats:b772dd71da68016dc4c081d97a69b162&#34;&gt;Caveats&lt;/h2&gt;
+
+&lt;p&gt;While a quick and easy solution for most engineers to implement, this solution
+is both complex as it requires more moving parts and introduces a single point
+of failure in another datacenter with another provider &amp;ndash; although the proxy is
+only used for IPv6.  More alarmingly though, because it is not possible to create
+multiple DNS records with the same name with both CNAME and A/AAAA record types,
+I had to hardcode the ELB IP addresses as A-records on api.takumi.com, while the
+AAAA record pointed to the IPv6 address of the proxy.&lt;/p&gt;
+
+&lt;p&gt;This meant that if AWS changes the IP addresses of our ELB, which they might do
+at any moment and actively discourage any reliance on them, instead providing their
+own DNS names which should be accessed via CNAME entries from customer hostnames;
+our users would be stuck accessing outdated IP addresses which might not even
+answer, and certainly wouldn&amp;rsquo;t route traffic to our actual cloud servers.&lt;/p&gt;
+
+&lt;p&gt;A real solution would be to get a single DNS hostname from Amazon which would
+contain both IPv6 and IPv4 (AAAA and A records) which will reliably reach our
+load balancers, without the need to monitor for IP address changes, or add new
+proxy machines to our operational environment!&lt;/p&gt;
+
+&lt;h2 id=&#34;cloudfront-to-the-rescue:b772dd71da68016dc4c081d97a69b162&#34;&gt;CloudFront to the Rescue&lt;/h2&gt;
+
+&lt;p&gt;After consulting with a friend who&amp;rsquo;s an engineer with Amazon the simplest
+solution (with the added benefit of giving us lower latencies and DDoS
+protection) would be to setup a non-caching CloudFront distribution, the origin
+of which would be our production Elastic Load Balancer.  When creating a
+CloudFront distribution it is possible to enable IPv6, and by allowing all HTTP
+methods, and choosing to forward all HTTP headers, and to forward all cookies
+and query string parameters, you&amp;rsquo;ve created a non-caching IPv6 accessible
+CloudFront distribution.&lt;/p&gt;
+
+&lt;p&gt;&lt;figure&gt;
+    &lt;h4&gt;CloudFront Default Cache Behavior Settings&lt;/h4&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png&#34;  /&gt;
+    &lt;figcaption&gt;
+        &lt;h5&gt;Relevant sections highlighted in red&lt;/h5&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;figure&gt;
+    &lt;h4&gt;CloudFront Distribution Settings&lt;/h4&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png&#34;  /&gt;
+    &lt;figcaption&gt;
+        &lt;h5&gt;Relevant sections highlighted in red&lt;/h5&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;migrating:b772dd71da68016dc4c081d97a69b162&#34;&gt;Migrating&lt;/h2&gt;
+
+&lt;p&gt;Since the new setup means having a CDN in front of our API, which essentially
+means deploying a distributed caching system in front of an API which almost
+by definition can be dangerous to cache accidentally, and we also rely on our
+own custom HTTP headers for identifying different client platforms and versions.&lt;/p&gt;
+
+&lt;p&gt;In short: we don&amp;rsquo;t want to switch all of our traffic onto CloudFront in one go
+as some insidious bugs might surface, and due to the aggressive caching and
+TTL ignoring of many large ISPs and DNS providers, the fallout could be rather
+painful.&lt;/p&gt;
+
+&lt;p&gt;To migrate gradually to our new CloudFront distribution I then decided to change
+our main API DNS entry to a set of weighted records, starting with 99% of lookups
+receiving my workaround solution, and 1% the new CloudFront distribution.&lt;/p&gt;
+
+&lt;p&gt;&lt;figure&gt;
+    &lt;h4&gt;Migrating to the new setup&lt;/h4&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/aws-cf-ipv6-2.png&#34;  /&gt;
+    &lt;figcaption&gt;
+        &lt;h5&gt;Weighted DNS records allow a gradual switch&lt;/h5&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;In a few days, if we have no issues with the new setup we can change the weights
+on those records to gradually move more traffic over to CloudFront, or all at once.&lt;/p&gt;
+
+&lt;h2 id=&#34;final-setup:b772dd71da68016dc4c081d97a69b162&#34;&gt;Final Setup&lt;/h2&gt;
+
+&lt;p&gt;On top of getting the IPv6 support we need to avoid any random rejections at Apple,
+we&amp;rsquo;ll also benefit from better latencies and we are in a stronger position to deal
+with any DDoS attacks.  Although this is an annoying problem due to inconsistent
+testing at Apple, and the fact that our cloud provider has not fully embraced IPv6,
+I am very pleased with this solution, and hope it can be of help to others.&lt;/p&gt;
+
+&lt;p&gt;&lt;figure&gt;
+    &lt;h4&gt;Final Setup with CloudFront&lt;/h4&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/aws-cf-ipv6-3.png&#34;  /&gt;
+    &lt;figcaption&gt;
+        &lt;h5&gt;Simple and resilient&lt;/h5&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note that in the last diagram actual IP&amp;rsquo;s have been replaced with &lt;code&gt;a.b.c.d&lt;/code&gt;, as we
+no longer depend on knowledge about those specifics further up in the stack.&lt;/p&gt;
+
+&lt;p&gt;This is an example of the same principles of building clean abstractions most
+developers know from writing software, but applied to systems design where they are
+of course equally important.&lt;/p&gt;
+
+&lt;p&gt;The chain leading up to the ELB should not need to know or care about the actual
+machines/IP&amp;rsquo;s comprising the load balancer.  The fragility and complexity of the
+first solution can be mostly attributed to that leaky abstraction, which we have
+now gotten rid of completely.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusions:b772dd71da68016dc4c081d97a69b162&#34;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;IPv6 is coming, and I (we?) can no longer avoid dealing with it and learning more about
+it.  Albeit random and potentially unfair this occurrence did trigger that, and in
+the end our API is more robust and flexible than before.&lt;/p&gt;
+
+&lt;p&gt;I hope our experience can help other app developers on AWS backends, although the
+CloudFront solution could be used by anyone with a HTTP/HTTPS accessible API.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk</title>
