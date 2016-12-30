@@ -10,12 +10,24 @@
     <atom:link href="http://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Terminating IPv6 on AWS</title>
+      <title>Accessing an AWS hosted backend via IPv6</title>
       <link>http://steinn.org/post/ipv6-with-cloudfront-on-aws/</link>
       <pubDate>Fri, 30 Dec 2016 13:42:23 +0000</pubDate>
       
       <guid>http://steinn.org/post/ipv6-with-cloudfront-on-aws/</guid>
       <description>
+
+&lt;p&gt;Reaching my API via IPv6 is not something I considered a high priority,
+but due to my prior experience with AWS I took the ability for granted.
+Recently I found out that it&amp;rsquo;s not as simple as I thought, since new AWS
+accounts do not get access to EC2-Classic, and to my surprise EC2-VPC
+has only &lt;a href=&#34;https://aws.amazon.com/blogs/aws/new-ipv6-support-for-ec2-instances-in-virtual-private-clouds/&#34;&gt;
+recently&lt;/a&gt; started supporting IPv6, and only in us-east-1 with
+several limitations.&lt;/p&gt;
+
+&lt;p&gt;While not as trivial as I thought, there are simple solutions available,
+so I will describe the how and why of a couple of ways which we recently
+used at &lt;a href=&#34;https://takumi.com&#34;&gt;Takumi&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;background:b772dd71da68016dc4c081d97a69b162&#34;&gt;Background&lt;/h2&gt;
 

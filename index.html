@@ -57,19 +57,21 @@
                                     <div class="li-article">
                                        <article>
     <header>
-        <h2><a href="http://steinn.org/post/ipv6-with-cloudfront-on-aws/">Terminating IPv6 on AWS </a></h2>
+        <h2><a href="http://steinn.org/post/ipv6-with-cloudfront-on-aws/">Accessing an AWS hosted backend via IPv6 </a></h2>
         <time class="li-article-date">Friday, December 30, 2016</time>
     </header>
     <section class="li-article-section">
-        <h2 id="background:b772dd71da68016dc4c081d97a69b162">Background</h2>
+        <p>Reaching my API via IPv6 is not something I considered a high priority,
+but due to my prior experience with AWS I took the ability for granted.
+Recently I found out that it&rsquo;s not as simple as I thought, since new AWS
+accounts do not get access to EC2-Classic, and to my surprise EC2-VPC
+has only <a href="https://aws.amazon.com/blogs/aws/new-ipv6-support-for-ec2-instances-in-virtual-private-clouds/">
+recently</a> started supporting IPv6, and only in us-east-1 with
+several limitations.</p>
 
-<p>This summer Apple announced that they would require all apps submitted to the
-App Store to support IPv6.  At Takumi we were not concerned, as in the
-past I had noticed Amazon ELB&rsquo;s have both AAAA records and a nice
-&ldquo;dualstack&rdquo; DNS name which had both A records and AAAA records for the
-underlying hosts &ndash; and the Takumi API is accessed through an AWS ELB.
-Besides our app not hardcoding any reliance on IPv4 (such as addresses or low
-level packet construction), we felt no pressure to reassess our connectivity.</p>
+<p>While not as trivial as I thought, there are simple solutions available,
+so I will describe the how and why of a couple of ways which we recently
+used at <a href="https://takumi.com">Takumi</a>.</p>
 
     </section>
     <footer>

@@ -5,7 +5,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 
-        <title>Terminating IPv6 on AWS &middot; steinn.org</title>
+        <title>Accessing an AWS hosted backend via IPv6 &middot; steinn.org</title>
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' type='text/css'>
         <link rel="stylesheet" href="http://steinn.org/libraries/normalize.3.0.1.css" />
         <link rel="stylesheet" href="http://steinn.org/css/lakkris.min.css" />
@@ -56,7 +56,7 @@
                         
 			    <time class="li-article-date">Friday, December 30, 2016</time>
                         
-                        <h1 class="li-article-title">Terminating IPv6 on AWS</h1>
+                        <h1 class="li-article-title">Accessing an AWS hosted backend via IPv6</h1>
                         <span class="li-article-taxonomies">
                             
 
@@ -66,6 +66,18 @@
                     </header>
                     <section>
                         
+
+<p>Reaching my API via IPv6 is not something I considered a high priority,
+but due to my prior experience with AWS I took the ability for granted.
+Recently I found out that it&rsquo;s not as simple as I thought, since new AWS
+accounts do not get access to EC2-Classic, and to my surprise EC2-VPC
+has only <a href="https://aws.amazon.com/blogs/aws/new-ipv6-support-for-ec2-instances-in-virtual-private-clouds/">
+recently</a> started supporting IPv6, and only in us-east-1 with
+several limitations.</p>
+
+<p>While not as trivial as I thought, there are simple solutions available,
+so I will describe the how and why of a couple of ways which we recently
+used at <a href="https://takumi.com">Takumi</a>.</p>
 
 <h2 id="background:b772dd71da68016dc4c081d97a69b162">Background</h2>
 
