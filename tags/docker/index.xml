@@ -138,17 +138,12 @@ built a little tool which uses &lt;code&gt;git&lt;/code&gt;, &lt;code&gt;awsebcl
 container with a specific tag, to a specific environment.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;
-&lt;figure &gt;
-    
-        &lt;img src=&#34;http://static.steinn.org/blog/post/codeship-docker-ci.png&#34; /&gt;
-    
-    
+&lt;p&gt;&lt;figure&gt;
+    &lt;h4&gt;Rough diagram of our setup&lt;/h4&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/codeship-docker-ci.png&#34;  /&gt;
     &lt;figcaption&gt;
-        &lt;h4&gt;Rough diagram of our setup&lt;/h4&gt;
-        
+        &lt;h5&gt;&lt;/h5&gt;
     &lt;/figcaption&gt;
-    
 &lt;/figure&gt;
 &lt;/p&gt;
 
@@ -241,17 +236,12 @@ which is linked to another docker named &lt;code&gt;postgres&lt;/code&gt;.  Our 
 &lt;code&gt;app&lt;/code&gt; service.  Finally we have a &lt;em&gt;deployment&lt;/em&gt; step which runs an instance of
 our &lt;code&gt;deployment&lt;/code&gt; service, with the command required to trigger a deployment.&lt;/p&gt;
 
-&lt;p&gt;
-&lt;figure &gt;
-    
-        &lt;img src=&#34;http://static.steinn.org/blog/post/codeship-cd-build-success.png&#34; /&gt;
-    
-    
+&lt;p&gt;&lt;figure&gt;
+    &lt;h4&gt;Pull request merged to master and deployed to dev&lt;/h4&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/codeship-cd-build-success.png&#34;  /&gt;
     &lt;figcaption&gt;
-        &lt;h4&gt;Pull request merged to master and deployed to dev&lt;/h4&gt;
-        
+        &lt;h5&gt;&lt;/h5&gt;
     &lt;/figcaption&gt;
-    
 &lt;/figure&gt;
 &lt;/p&gt;
 

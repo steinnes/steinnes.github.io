@@ -203,17 +203,12 @@ built a little tool which uses <code>git</code>, <code>awsebcli</code> and <code
 container with a specific tag, to a specific environment.</li>
 </ol>
 
-<p>
-<figure >
-    
-        <img src="http://static.steinn.org/blog/post/codeship-docker-ci.png" />
-    
-    
+<p><figure>
+    <h4>Rough diagram of our setup</h4>
+    <img src="http://static.steinn.org/blog/post/codeship-docker-ci.png"  />
     <figcaption>
-        <h4>Rough diagram of our setup</h4>
-        
+        <h5></h5>
     </figcaption>
-    
 </figure>
 </p>
 
@@ -306,17 +301,12 @@ which is linked to another docker named <code>postgres</code>.  Our second step 
 <code>app</code> service.  Finally we have a <em>deployment</em> step which runs an instance of
 our <code>deployment</code> service, with the command required to trigger a deployment.</p>
 
-<p>
-<figure >
-    
-        <img src="http://static.steinn.org/blog/post/codeship-cd-build-success.png" />
-    
-    
+<p><figure>
+    <h4>Pull request merged to master and deployed to dev</h4>
+    <img src="http://static.steinn.org/blog/post/codeship-cd-build-success.png"  />
     <figcaption>
-        <h4>Pull request merged to master and deployed to dev</h4>
-        
+        <h5></h5>
     </figcaption>
-    
 </figure>
 </p>
 

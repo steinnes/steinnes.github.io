@@ -73,45 +73,62 @@
 App Store to support IPv6.  At Takumi we were not concerned, as in the
 past I had noticed Amazon ELB&rsquo;s have both AAAA records and a nice
 &ldquo;dualstack&rdquo; DNS name which had both A records and AAAA records for the
-underlying hosts &ndash; and the Takumi API is accessed through an AWS ELB.</p>
+underlying hosts &ndash; and the Takumi API is accessed through an AWS ELB.
+Besides our app not hardcoding any reliance on IPv4 (such as addresses or low
+level packet construction), we felt no pressure to reassess our connectivity.</p>
 
 <p>Then about a month ago we got our first app rejection because our API was not
 reachable in an IPv6-only network Apple have setup for testing.  To my surprise
 and despair there were no AAAA records, or a &ldquo;dualstack&rdquo; DNS name on any
 of our ELBs.  Also I was surprised because our DNS setup did not include any
-AAAA records, so it seems Apple was testing this without using a DNS64/NAT64
+AAAA records, it seemed Apple was testing this without using a DNS64/NAT64
 network.</p>
 
-<p>Quickly I found out that the reason for this is that the Virtual Private Cloud
-offering of AWS does not support IPv6 (some support has been rolled out now
-in select regions), and I surmise that any resources created to wrap publicly
-accessible VPC instances are thus IPv4-only as well.  All of our ELB&rsquo;s and ALB&rsquo;s
-have only A records, and no AAAA records associated with their DNS names.</p>
+<p>Quickly I found out that the reason for no AAAA records is that the Virtual
+Private Cloud offering of AWS does not support IPv6 (some support has been
+rolled out now in select regions), and I surmise that any resources created
+to wrap publicly accessible VPC instances are thus IPv4-only as well.  All
+of our ELB&rsquo;s and ALB&rsquo;s have only A records, and no AAAA records associated
+with their DNS names.  So the only way for an IPv6 device to access them
+is via (local) DNS64/NAT64.</p>
 
 <p>To sum up: because we are a new customer of AWS, we are forced to use the VPC
 offering, which replaces EC2-Classic (as it&rsquo;s now known), and this newer
 compute cloud does not support IPv6, which there is growing pressure around
-the internet to fully support.  I was not pleased.</p>
+the internet to fully support.  I was not pleased, and we are not the <a
+href="https://forums.aws.amazon.com/message.jspa?messageID=709638#718517">first</a>
+app <a href="https://forums.developer.apple.com/thread/48314">developer</a> to get
+frustrated by this.  And of course this <a
+href="http://timv.me/hacking/apple-aws-and-ipv6-testing/">shouldn&rsquo;t happen</a>
+unless your app has some unusual reliance on IPv4.</p>
+
+<p>I however try and avoid getting submissions approved by explaining to the app
+reviewer that they should test things differently, and to be fair: if someone
+attempts to access our app via an IPv6-only network it wouldn&rsquo;t work. So
+regardless of Apple&rsquo;s testing procedures or fairness, getting this connectivity
+issue fixed seemed like the quickest and best solution.</p>
 
 <h2 id="first-solution:b772dd71da68016dc4c081d97a69b162">First solution</h2>
 
-<p>My first solution was to find a cloud provider which would give me a publicly
+<p>A quick solution was to find a cloud provider which could provide a publicly
 accessible (IPv4 and IPv6) machine, and Digital Ocean became the provider of
 choice.  I setup a debian machine there, an nginx proxy listening on the IPv6
-interface and proxying to IPv4 backends using our ELB CNAME.</p>
+interface  which proxied to IPv4 backends using our ELB CNAME.</p>
 
-<p>
-<figure >
-    
-        <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-1.png" />
-    
-    
+<p><figure>
+    <h4>Workaround using Digital Ocean proxy node</h4>
+    <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-1.png"  />
     <figcaption>
-        <h4>Workaround solution using DO proxy</h4>
-        
+        <h5>Do those A records smell a little funky?</h5>
     </figcaption>
-    
 </figure>
+</p>
+
+<p>This simple solution only took an hour or so to setup, and got our app approved
+without any lengthy dialogue with Apple.  The nginx configuration is very simple,
+as it&rsquo;s simply functioning as a TCP proxy:</p>
+
+<p><script src="https://gist.github.com/c6f0073485593c05fee51a123eadab91.js"></script>
 </p>
 
 <h2 id="caveats:b772dd71da68016dc4c081d97a69b162">Caveats</h2>
@@ -142,35 +159,25 @@ solution (with the added benefit of giving us lower latencies and DDoS
 protection) would be to setup a non-caching CloudFront distribution, the origin
 of which would be our production Elastic Load Balancer.  When creating a
 CloudFront distribution it is possible to enable IPv6, and by allowing all HTTP
-methods, and choosing to forward <code>All</code> HTTP hedars, and to forward all cookies
+methods, and choosing to forward all HTTP headers, and to forward all cookies
 and query string parameters, you&rsquo;ve created a non-caching IPv6 accessible
 CloudFront distribution.</p>
 
-<p>
-<figure >
-    
-        <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png" />
-    
-    
+<p><figure>
+    <h4>CloudFront Default Cache Behavior Settings</h4>
+    <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png"  />
     <figcaption>
-        <h4>CloudFront Default Cache Behavior Settings</h4>
-        
+        <h5>Relevant sections highlighted in red</h5>
     </figcaption>
-    
 </figure>
 </p>
 
-<p>
-<figure >
-    
-        <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png" />
-    
-    
+<p><figure>
+    <h4>CloudFront Distribution Settings</h4>
+    <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png"  />
     <figcaption>
-        <h4>CloudFront Distribution Settings</h4>
-        
+        <h5>Relevant sections highlighted in red</h5>
     </figcaption>
-    
 </figure>
 </p>
 
@@ -181,7 +188,7 @@ means deploying a distributed caching system in front of an API which almost
 by definition can be dangerous to cache accidentally, and we also rely on our
 own custom HTTP headers for identifying different client platforms and versions.</p>
 
-<p>In short: I don&rsquo;t want to switch all of our traffic onto CloudFront in one go
+<p>In short: we don&rsquo;t want to switch all of our traffic onto CloudFront in one go
 as some insidious bugs might surface, and due to the aggressive caching and
 TTL ignoring of many large ISPs and DNS providers, the fallout could be rather
 painful.</p>
@@ -190,42 +197,55 @@ painful.</p>
 our main API DNS entry to a set of weighted records, starting with 99% of lookups
 receiving my workaround solution, and 1% the new CloudFront distribution.</p>
 
-<p>
-<figure >
-    
-        <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-2.png" />
-    
-    
+<p><figure>
+    <h4>Migrating to the new setup</h4>
+    <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-2.png"  />
     <figcaption>
-        <h4>Migrating to the new setup</h4>
-        
+        <h5>Weighted DNS records allow a gradual switch</h5>
     </figcaption>
-    
 </figure>
 </p>
 
 <p>In a few days, if we have no issues with the new setup we can change the weights
 on those records to gradually move more traffic over to CloudFront, or all at once.</p>
 
-<p>The final setup will then be like this, and on top of getting the IPv6 support we
-need to avoid any random rejections at Apple, we&rsquo;ll also benefit from better
-latencies and we are in a stronger position to deal with any DDoS attacks as well.</p>
+<h2 id="final-setup:b772dd71da68016dc4c081d97a69b162">Final Setup</h2>
 
-<p>
-<figure >
-    
-        <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-3.png" />
-    
-    
+<p>On top of getting the IPv6 support we need to avoid any random rejections at Apple,
+we&rsquo;ll also benefit from better latencies and we are in a stronger position to deal
+with any DDoS attacks.  Although this is an annoying problem due to inconsistent
+testing at Apple, and the fact that our cloud provider has not fully embraced IPv6,
+I am very pleased with this solution, and hope it can be of help to others.</p>
+
+<p><figure>
+    <h4>Final Setup with CloudFront</h4>
+    <img src="http://static.steinn.org/blog/post/aws-cf-ipv6-3.png"  />
     <figcaption>
-        <h4>New setup using CloudFront</h4>
-        
+        <h5>Simple and resilient</h5>
     </figcaption>
-    
 </figure>
 </p>
 
-<p>Not</p>
+<p>Note that in the last diagram actual IP&rsquo;s have been replaced with <code>a.b.c.d</code>, as we
+no longer depend on knowledge about those specifics further up in the stack.</p>
+
+<p>This is an example of the same principles of building clean abstractions most
+developers know from writing software, but applied to systems design where they are
+of course equally important.</p>
+
+<p>The chain leading up to the ELB should not need to know or care about the actual
+machines/IP&rsquo;s comprising the load balancer.  The fragility and complexity of the
+first solution can be mostly attributed to that leaky abstraction, which we have
+now gotten rid of completely.</p>
+
+<h2 id="conclusions:b772dd71da68016dc4c081d97a69b162">Conclusions</h2>
+
+<p>IPv6 is coming, and I (we?) can no longer avoid dealing with it and learning more about
+it.  Albeit random and potentially unfair this occurrence did trigger that, and in
+the end our API is more robust and flexible than before.</p>
+
+<p>I hope our experience can help other app developers on AWS backends, although the
+CloudFront solution could be used by anyone with a HTTP/HTTPS accessible API.</p>
 
                     </section>
                 </article>
