@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Cd on steinn.org</title>
-    <link>http://steinn.org/tags/cd/</link>
+    <link>https://steinn.org/tags/cd/</link>
     <description>Recent content in Cd on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 23 Mar 2016 09:57:15 +0000</lastBuildDate>
-    <atom:link href="http://steinn.org/tags/cd/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://steinn.org/tags/cd/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk</title>
-      <link>http://steinn.org/post/docker-cd-codeship/</link>
+      <link>https://steinn.org/post/docker-cd-codeship/</link>
       <pubDate>Wed, 23 Mar 2016 09:57:15 +0000</pubDate>
       
-      <guid>http://steinn.org/post/docker-cd-codeship/</guid>
+      <guid>https://steinn.org/post/docker-cd-codeship/</guid>
       <description>
 
 &lt;p&gt;At &lt;a href=&#34;http://takumi.com/&#34;&gt;Takumi&lt;/a&gt; we recently started deploying immutable pre-built docker containers

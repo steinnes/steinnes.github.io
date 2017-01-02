@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Redis on steinn.org</title>
-    <link>http://steinn.org/tags/redis/</link>
+    <link>https://steinn.org/tags/redis/</link>
     <description>Recent content in Redis on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 19 Mar 2015 01:11:52 +0000</lastBuildDate>
-    <atom:link href="http://steinn.org/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://steinn.org/tags/redis/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>redis workload recorder</title>
-      <link>http://steinn.org/post/redis-workload-recorder/</link>
+      <link>https://steinn.org/post/redis-workload-recorder/</link>
       <pubDate>Thu, 19 Mar 2015 01:11:52 +0000</pubDate>
       
-      <guid>http://steinn.org/post/redis-workload-recorder/</guid>
+      <guid>https://steinn.org/post/redis-workload-recorder/</guid>
       <description>&lt;p&gt;Recently I&amp;rsquo;ve been working on some redis profiling and research, and since
 we run several distinct redis instances at Plain Vanilla (due to reliability
 and configuration reasons) the necessity to record a certain amount of commands
@@ -53,10 +53,10 @@ replayed by something like this:&lt;/p&gt;
     
     <item>
       <title>Changing redis maxmemory gradually</title>
-      <link>http://steinn.org/post/redis-gradual-maxmemory/</link>
+      <link>https://steinn.org/post/redis-gradual-maxmemory/</link>
       <pubDate>Sun, 01 Mar 2015 16:28:22 +0000</pubDate>
       
-      <guid>http://steinn.org/post/redis-gradual-maxmemory/</guid>
+      <guid>https://steinn.org/post/redis-gradual-maxmemory/</guid>
       <description>&lt;p&gt;Today we&amp;rsquo;ve been busy migrating some AWS instances at work due to upcoming
 maintenance events in AWS.  One of the instance families we used a lot when
 building QuizUp is the m2 instance family and almost all of our m2 instances

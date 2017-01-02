@@ -2,83 +2,83 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://steinn.org/</loc>
+    <loc>https://steinn.org/</loc>
     <lastmod>2016-12-30T13:42:23+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/ipv6-with-cloudfront-on-aws/</loc>
+    <loc>https://steinn.org/post/ipv6-with-cloudfront-on-aws/</loc>
     <lastmod>2016-12-30T13:42:23+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/docker-cd-codeship/</loc>
+    <loc>https://steinn.org/post/docker-cd-codeship/</loc>
     <lastmod>2016-03-23T09:57:15+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/flask-statsd-revisited/</loc>
+    <loc>https://steinn.org/post/flask-statsd-revisited/</loc>
     <lastmod>2016-03-15T21:28:49+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/elasticbeanstalk-swap/</loc>
+    <loc>https://steinn.org/post/elasticbeanstalk-swap/</loc>
     <lastmod>2016-03-14T09:02:25+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/ebenv-tool/</loc>
+    <loc>https://steinn.org/post/ebenv-tool/</loc>
     <lastmod>2016-02-24T23:30:28+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/flask-statsd/</loc>
+    <loc>https://steinn.org/post/flask-statsd/</loc>
     <lastmod>2015-11-30T09:58:33+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/apns-setup/</loc>
+    <loc>https://steinn.org/post/apns-setup/</loc>
     <lastmod>2015-08-13T16:37:37+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/datadog/</loc>
+    <loc>https://steinn.org/post/datadog/</loc>
     <lastmod>2015-04-16T21:08:49+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/redis-workload-recorder/</loc>
+    <loc>https://steinn.org/post/redis-workload-recorder/</loc>
     <lastmod>2015-03-19T01:11:52+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/reinventing-the-wheel/</loc>
+    <loc>https://steinn.org/post/reinventing-the-wheel/</loc>
     <lastmod>2015-03-09T16:03:03+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/redis-gradual-maxmemory/</loc>
+    <loc>https://steinn.org/post/redis-gradual-maxmemory/</loc>
     <lastmod>2015-03-01T16:28:22+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/docker-workshop/</loc>
+    <loc>https://steinn.org/post/docker-workshop/</loc>
     <lastmod>2015-02-14T17:12:57+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/brute-force-still-going-strong/</loc>
+    <loc>https://steinn.org/post/brute-force-still-going-strong/</loc>
     <lastmod>2015-02-10T21:08:21+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/post/utmessan2015/</loc>
+    <loc>https://steinn.org/post/utmessan2015/</loc>
     <lastmod>2015-02-10T11:44:14+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://steinn.org/about/</loc>
+    <loc>https://steinn.org/about/</loc>
   </url>
   
 </urlset>

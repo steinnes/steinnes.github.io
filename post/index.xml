@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on steinn.org</title>
-    <link>http://steinn.org/post/</link>
+    <link>https://steinn.org/post/</link>
     <description>Recent content in Posts on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 30 Dec 2016 13:42:23 +0000</lastBuildDate>
-    <atom:link href="http://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://steinn.org/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Accessing an AWS hosted backend via IPv6</title>
-      <link>http://steinn.org/post/ipv6-with-cloudfront-on-aws/</link>
+      <link>https://steinn.org/post/ipv6-with-cloudfront-on-aws/</link>
       <pubDate>Fri, 30 Dec 2016 13:42:23 +0000</pubDate>
       
-      <guid>http://steinn.org/post/ipv6-with-cloudfront-on-aws/</guid>
+      <guid>https://steinn.org/post/ipv6-with-cloudfront-on-aws/</guid>
       <description>
 
 &lt;p&gt;Reaching my API via IPv6 is not something I considered a high priority,
@@ -213,10 +213,10 @@ CloudFront solution could be used by anyone with a HTTP/HTTPS accessible API.&lt
     
     <item>
       <title>Continuous delivered Dockers via Codeship &#43; Elastic Beanstalk</title>
-      <link>http://steinn.org/post/docker-cd-codeship/</link>
+      <link>https://steinn.org/post/docker-cd-codeship/</link>
       <pubDate>Wed, 23 Mar 2016 09:57:15 +0000</pubDate>
       
-      <guid>http://steinn.org/post/docker-cd-codeship/</guid>
+      <guid>https://steinn.org/post/docker-cd-codeship/</guid>
       <description>
 
 &lt;p&gt;At &lt;a href=&#34;http://takumi.com/&#34;&gt;Takumi&lt;/a&gt; we recently started deploying immutable pre-built docker containers
@@ -490,10 +490,10 @@ here, here are some helpful links:&lt;/p&gt;
     
     <item>
       <title>Flask and StatsD revisited</title>
-      <link>http://steinn.org/post/flask-statsd-revisited/</link>
+      <link>https://steinn.org/post/flask-statsd-revisited/</link>
       <pubDate>Tue, 15 Mar 2016 21:28:49 +0000</pubDate>
       
-      <guid>http://steinn.org/post/flask-statsd-revisited/</guid>
+      <guid>https://steinn.org/post/flask-statsd-revisited/</guid>
       <description>&lt;p&gt;A couple of months ago I wrote about &lt;a href=&#34;http://steinn.org/post/flask-statsd/&#34;&gt;automatically emitting&lt;/a&gt;
 statsd metrics for Flask views using a &lt;a hre_f=&#34;http://werkzeug.pocoo.org/&#34;&gt;Werkzeug&lt;/a&gt;
 middleware.&lt;/p&gt;
@@ -524,10 +524,10 @@ sure feels good to share the improved solution :-)&lt;/p&gt;
     
     <item>
       <title>Adding swap to Elastic Beanstalk</title>
-      <link>http://steinn.org/post/elasticbeanstalk-swap/</link>
+      <link>https://steinn.org/post/elasticbeanstalk-swap/</link>
       <pubDate>Mon, 14 Mar 2016 09:02:25 +0000</pubDate>
       
-      <guid>http://steinn.org/post/elasticbeanstalk-swap/</guid>
+      <guid>https://steinn.org/post/elasticbeanstalk-swap/</guid>
       <description>&lt;p&gt;If you&amp;rsquo;re using small t2 instances on Elastic Beanstalk which only have 1GB or
 less of memory, you may run out of memory while doing rare, yet memory intensive
 tasks such as deploying (and/or building) your app.&lt;/p&gt;
@@ -601,10 +601,10 @@ Swap:      &lt;span style=&#34;color: #ae81ff&#34;&gt;2097148&lt;/span&gt;      
     
     <item>
       <title>ebenv: Elastic Beanstalk environment copy/dump tool</title>
-      <link>http://steinn.org/post/ebenv-tool/</link>
+      <link>https://steinn.org/post/ebenv-tool/</link>
       <pubDate>Wed, 24 Feb 2016 23:30:28 +0000</pubDate>
       
-      <guid>http://steinn.org/post/ebenv-tool/</guid>
+      <guid>https://steinn.org/post/ebenv-tool/</guid>
       <description>&lt;p&gt;At &lt;a href=&#34;http://takumi.com&#34;&gt;Takumi&lt;/a&gt; we use Elastic Beanstalk, which
 is a nice API/service from AWS which strikes a decent balance between a
 heroku-esque simplified service interface for developers, and the hands-on
@@ -693,11 +693,11 @@ writing it ;-)&lt;/p&gt;
     
     <item>
       <title>Flask and StatsD</title>
-      <link>http://steinn.org/post/flask-statsd/</link>
+      <link>https://steinn.org/post/flask-statsd/</link>
       <pubDate>Mon, 30 Nov 2015 09:58:33 +0000</pubDate>
       
-      <guid>http://steinn.org/post/flask-statsd/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;ve written about &lt;a href=&#34;http://steinn.org/post/reinventing-the-wheel&#34;&gt;StatsD&lt;/a&gt; &lt;a href=&#34;http://steinn.org/post/datadog&#34;&gt;before&lt;/a&gt;,
+      <guid>https://steinn.org/post/flask-statsd/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve written about &lt;a href=&#34;https://steinn.org/post/reinventing-the-wheel&#34;&gt;StatsD&lt;/a&gt; &lt;a href=&#34;https://steinn.org/post/datadog&#34;&gt;before&lt;/a&gt;,
 but it&amp;rsquo;s time to pick up the pen again, at least in the proverbial sense (I&amp;rsquo;m
 typing this on a laptop-chiclet keyboard).&lt;/p&gt;
 
@@ -762,7 +762,7 @@ with &lt;code&gt;id&lt;/code&gt;.  Probably a more robust approach would be to p
 and construct it out of safe characters found between slashes.  I&amp;rsquo;ll see if
 there&amp;rsquo;s a smarter way if I make a proper flask plugin out of this.&lt;/s&gt;
 Update: I rewrote the metric name construction to use the Flask app&amp;rsquo;s URL map.
-See &lt;a href=&#34;http://steinn.org/post/flask-statsd-revisited/&#34;&gt;this post&lt;/a&gt; for details :-)&lt;/p&gt;
+See &lt;a href=&#34;https://steinn.org/post/flask-statsd-revisited/&#34;&gt;this post&lt;/a&gt; for details :-)&lt;/p&gt;
 
 &lt;p&gt;The code above includes a couple of little extras:&lt;/p&gt;
 
@@ -798,10 +798,10 @@ automatically :-)&lt;/p&gt;
     
     <item>
       <title>Setting up APNS for iOS</title>
-      <link>http://steinn.org/post/apns-setup/</link>
+      <link>https://steinn.org/post/apns-setup/</link>
       <pubDate>Thu, 13 Aug 2015 16:37:37 +0000</pubDate>
       
-      <guid>http://steinn.org/post/apns-setup/</guid>
+      <guid>https://steinn.org/post/apns-setup/</guid>
       <description>&lt;p&gt;Last week we started setting up push notifications on the iOS app we are building
 at work.  I knew from my time at QuizUp that this is more complicated than
 you&amp;rsquo;d think, but still I was surprised at the complexity Apple front-loads on
@@ -909,15 +909,15 @@ with the bundle id, which was built using the provisioning profile.&lt;/p&gt;
     
     <item>
       <title>Monitoring at QuizUp: Datadog</title>
-      <link>http://steinn.org/post/datadog/</link>
+      <link>https://steinn.org/post/datadog/</link>
       <pubDate>Thu, 16 Apr 2015 21:08:49 +0000</pubDate>
       
-      <guid>http://steinn.org/post/datadog/</guid>
+      <guid>https://steinn.org/post/datadog/</guid>
       <description>&lt;p&gt;One of the services we use a lot for monitoring at QuizUp is Datadog.&lt;/p&gt;
 
 &lt;p&gt;We use several software-as-a-service&amp;rsquo;s, but this one is one of my absolute
 favorites.  Datadog is an aggregator for StatsD metrics, and StatSD is
-as &lt;a href=&#34;http://steinn.org/post/reinventing-the-wheel/&#34;&gt;I have mentioned before&lt;/a&gt;, one
+as &lt;a href=&#34;https://steinn.org/post/reinventing-the-wheel/&#34;&gt;I have mentioned before&lt;/a&gt;, one
 of my favorite technologies.  The way we use Datadog is both through their
 large set of excellent &lt;a href=&#34;https://www.datadoghq.com/integrations/&#34;&gt;
 integrations&lt;/a&gt;, which retrieve a host of standard metrics from every
@@ -980,10 +980,10 @@ that if cost is not an issue.&lt;/p&gt;
     
     <item>
       <title>redis workload recorder</title>
-      <link>http://steinn.org/post/redis-workload-recorder/</link>
+      <link>https://steinn.org/post/redis-workload-recorder/</link>
       <pubDate>Thu, 19 Mar 2015 01:11:52 +0000</pubDate>
       
-      <guid>http://steinn.org/post/redis-workload-recorder/</guid>
+      <guid>https://steinn.org/post/redis-workload-recorder/</guid>
       <description>&lt;p&gt;Recently I&amp;rsquo;ve been working on some redis profiling and research, and since
 we run several distinct redis instances at Plain Vanilla (due to reliability
 and configuration reasons) the necessity to record a certain amount of commands
@@ -1022,10 +1022,10 @@ replayed by something like this:&lt;/p&gt;
     
     <item>
       <title>Reinventing the wheel</title>
-      <link>http://steinn.org/post/reinventing-the-wheel/</link>
+      <link>https://steinn.org/post/reinventing-the-wheel/</link>
       <pubDate>Mon, 09 Mar 2015 16:03:03 +0000</pubDate>
       
-      <guid>http://steinn.org/post/reinventing-the-wheel/</guid>
+      <guid>https://steinn.org/post/reinventing-the-wheel/</guid>
       <description>
 
 &lt;p&gt;We all tend to reinvent the wheel once in a while, and often it&amp;rsquo;s just
@@ -1095,10 +1095,10 @@ it consciously :-)&lt;/p&gt;
     
     <item>
       <title>Changing redis maxmemory gradually</title>
-      <link>http://steinn.org/post/redis-gradual-maxmemory/</link>
+      <link>https://steinn.org/post/redis-gradual-maxmemory/</link>
       <pubDate>Sun, 01 Mar 2015 16:28:22 +0000</pubDate>
       
-      <guid>http://steinn.org/post/redis-gradual-maxmemory/</guid>
+      <guid>https://steinn.org/post/redis-gradual-maxmemory/</guid>
       <description>&lt;p&gt;Today we&amp;rsquo;ve been busy migrating some AWS instances at work due to upcoming
 maintenance events in AWS.  One of the instance families we used a lot when
 building QuizUp is the m2 instance family and almost all of our m2 instances
@@ -1139,10 +1139,10 @@ I had which does just that and packaged it a little more nicely and it&amp;rsquo
     
     <item>
       <title>Docker Workshop</title>
-      <link>http://steinn.org/post/docker-workshop/</link>
+      <link>https://steinn.org/post/docker-workshop/</link>
       <pubDate>Sat, 14 Feb 2015 17:12:57 +0000</pubDate>
       
-      <guid>http://steinn.org/post/docker-workshop/</guid>
+      <guid>https://steinn.org/post/docker-workshop/</guid>
       <description>
 
 &lt;p&gt;These are the instructions/background I wrote for a workshop on Docker
@@ -1304,10 +1304,10 @@ we use in order to expose some of the trickier parts of using Docker in producti
     
     <item>
       <title>brute force still going strong</title>
-      <link>http://steinn.org/post/brute-force-still-going-strong/</link>
+      <link>https://steinn.org/post/brute-force-still-going-strong/</link>
       <pubDate>Tue, 10 Feb 2015 21:08:21 +0000</pubDate>
       
-      <guid>http://steinn.org/post/brute-force-still-going-strong/</guid>
+      <guid>https://steinn.org/post/brute-force-still-going-strong/</guid>
       <description>&lt;p&gt;While setting up this blog I was looking through my little VMs scattered around
 different cloud providers to find one which could serve as the A record for
 &lt;code&gt;steinn.org&lt;/code&gt; and redirect traffic to &lt;code&gt;steinnes.github.io&lt;/code&gt;.  I logged on to one of my
@@ -1345,10 +1345,10 @@ iptables -A INPUT -j REJECT  &lt;span style=&#34;color: #75715e&#34;&gt;# reject
     
     <item>
       <title>From Monolith to Services @ QuizUp</title>
-      <link>http://steinn.org/post/utmessan2015/</link>
+      <link>https://steinn.org/post/utmessan2015/</link>
       <pubDate>Tue, 10 Feb 2015 11:44:14 +0000</pubDate>
       
-      <guid>http://steinn.org/post/utmessan2015/</guid>
+      <guid>https://steinn.org/post/utmessan2015/</guid>
       <description>
 
 &lt;p&gt;Last week I did a talk at a local IT conference, &lt;a href=&#34;https://www.utmessan.is&#34;&gt;UT Messan&lt;/a&gt;.

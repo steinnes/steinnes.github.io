@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tools on steinn.org</title>
-    <link>http://steinn.org/tags/tools/</link>
+    <link>https://steinn.org/tags/tools/</link>
     <description>Recent content in Tools on steinn.org</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 24 Feb 2016 23:30:28 +0000</lastBuildDate>
-    <atom:link href="http://steinn.org/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://steinn.org/tags/tools/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>ebenv: Elastic Beanstalk environment copy/dump tool</title>
-      <link>http://steinn.org/post/ebenv-tool/</link>
+      <link>https://steinn.org/post/ebenv-tool/</link>
       <pubDate>Wed, 24 Feb 2016 23:30:28 +0000</pubDate>
       
-      <guid>http://steinn.org/post/ebenv-tool/</guid>
+      <guid>https://steinn.org/post/ebenv-tool/</guid>
       <description>&lt;p&gt;At &lt;a href=&#34;http://takumi.com&#34;&gt;Takumi&lt;/a&gt; we use Elastic Beanstalk, which
 is a nice API/service from AWS which strikes a decent balance between a
 heroku-esque simplified service interface for developers, and the hands-on
