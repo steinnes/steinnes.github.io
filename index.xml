@@ -136,7 +136,7 @@ CloudFront distribution.&lt;/p&gt;
 
 &lt;p&gt;&lt;figure&gt;
     &lt;h4&gt;CloudFront Distribution Settings&lt;/h4&gt;
-    &lt;img src=&#34;http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-1.png&#34;  /&gt;
+    &lt;img src=&#34;http://static.steinn.org/blog/post/aws-cf-ipv6-cf-config-2.png&#34;  /&gt;
     &lt;figcaption&gt;
         &lt;h5&gt;Relevant sections highlighted in red&lt;/h5&gt;
     &lt;/figcaption&gt;
